@@ -36,6 +36,11 @@ namespace PP_Helper.JSON
             init = true;
         }
 
+        public static bool IsInit()
+        {
+            return init;
+        }
+
         public static bool InDict(string hash)
         {
             // Just in case

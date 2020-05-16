@@ -46,9 +46,9 @@ namespace PP_Helper
 
         public void OnMenuSceneLoadedFresh(ScenesTransitionSetupDataSO transitionSetupDataSO)
         {
-
-            new GameObject("PP_HelperController").AddComponent<PP_HelperController>();
-            RawPPLoader.Initialize();
+            PP_HelperController.OnLoad();
+            if (!RawPPLoader.IsInit())
+                RawPPLoader.Initialize();
         }
 
         public void OnLevelSelected(LevelCollectionViewController levelCollectionViewController, IPreviewBeatmapLevel previewBeatmapLevel)

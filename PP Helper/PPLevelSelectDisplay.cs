@@ -38,7 +38,6 @@ namespace PP_Helper
             if (_pp == null)
             {
                 // Setup PP display object
-                Logger.log.Info("pp was null");
                 _pp = UnityEngine.Object.Instantiate(_maxCombo, _playerStatsContainer.transform);
                 _pp.name = "PP";
                 var ppTitle = _pp.GetComponentsInChildren<TextMeshProUGUI>().First(x => x.name == "Title");
@@ -46,6 +45,7 @@ namespace PP_Helper
 
                 // Just copying this from SongPlayHistory - need to look into a smarter way to this (and also compatibility??)
                 _maxCombo.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, -2.0f, 17.0f);
+                Logger.log.Info("maxcombo");
                 _highscore.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 15.0f, 17.0f);
                 _maxRank.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 32.0f, 16.0f);
                 _pp.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 48.0f, 16.0f);

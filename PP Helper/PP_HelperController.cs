@@ -7,7 +7,7 @@ namespace PP_Helper
     public class PP_HelperController : MonoBehaviour
     {
         public static PP_HelperController instance { get; private set; }
-        private PPLevelSelectDisplay _ppLevelSelectDisplay;
+        private static PPLevelSelectDisplay _ppLevelSelectDisplay;
         private string _id;
 
         private void Awake()
@@ -24,23 +24,20 @@ namespace PP_Helper
 
         }
 
-        private void Start()
+        public static void OnLoad()
         {
-            Logger.log?.Debug($"{name}: Start()");
+            if (instance == null)
+                new GameObject("PP_HelperController").AddComponent<PP_HelperController>();
 
             var soloFreePlayButton = Resources.FindObjectsOfTypeAll<Button>().First(x => x.name == "SoloFreePlayButton");
             soloFreePlayButton.onClick.AddListener(() =>
             {
                 Initialize();
             });
-
         }
 
-        private void Initialize()
+        private static void Initialize()
         {
-            if (_ppLevelSelectDisplay != null)
-                return;
-
             _ppLevelSelectDisplay = new PPLevelSelectDisplay();
         }
 
