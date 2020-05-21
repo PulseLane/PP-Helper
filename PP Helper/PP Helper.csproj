@@ -99,7 +99,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="UI\AccuracyController.cs" />
     <Compile Include="HarmonyPatches\StandardLevelDetailViewRefreshContent.cs" />
     <Compile Include="JSON\RawPPLoader.cs" />
     <Compile Include="Plugin.cs" />

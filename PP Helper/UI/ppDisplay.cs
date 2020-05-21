@@ -1,6 +1,7 @@
 ﻿using BeatSaberMarkupLanguage;
 using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Components;
+using BeatSaberMarkupLanguage.Parser;
 using BS_Utils.Utilities;
 using PP_Helper.JSON;
 using PP_Helper.Utils;
@@ -18,15 +19,19 @@ namespace PP_Helper.UI
 {
     public class ppDisplay : PersistentSingleton<ppDisplay>
     {
+        [UIParams]
+        private BSMLParserParams _parserParams;
+
         [UIComponent("pp")]
         public TextMeshProUGUI _ppText;
         [UIObject("accuracy")]
         public GameObject _accuracyObject;
         [UIValue("accuracyValue")]
-        public float _accuracy;
+        public float _accuracy = 85f;
 
         private StandardLevelDetailView _standardLevelDetailView;
         private static GameObject _parentObject;
+        private float _rawPP = 0f;
 
         internal void Setup()
         {
@@ -44,23 +49,21 @@ namespace PP_Helper.UI
             // Resize accuracy font size
             var _accText = _accuracyObject.GetComponentsInChildren<TextMeshProUGUI>().Last();
             _accText.fontSize = 3.5f;
-            _accuracy = 85f;
 
             // Resize accuracy adjuster
             var accTransform = (RectTransform) _accText.transform.parent.transform.parent.transform;
             accTransform.sizeDelta = new Vector2(30f, 1f);
-            Logger.log.Debug("Done setup");
 
             // We want pp stuff above play stuff
             var playButton = _standardLevelDetailView.GetPrivateField<Button>("_playButton");
             var playContainer = playButton.transform.parent.transform.parent;
             playContainer.transform.SetAsLastSibling();
+
+            Logger.log.Debug("Done setup");
         }
 
         internal void Refresh(string id)
         {
-            _accuracy = 85.0f;
-
             if (RawPPLoader.InDict(id))
             {
                 // Will fail if difficulty is unknown - set to default in '-' in that case
@@ -68,13 +71,13 @@ namespace PP_Helper.UI
                 {
                     _parentObject.SetActive(true);
                     IDifficultyBeatmap difficultyBeatmap = _standardLevelDetailView.selectedDifficultyBeatmap;
-                    float rawPP = RawPPLoader.GetRawPP(id, difficultyBeatmap);
-                    float ppGain = rawPP;
-                    _ppText.text = ($"{rawPP}pp (<color=\"green\">+{ppGain}</color>)");
-                    SetAccText();
+                    _rawPP = RawPPLoader.GetRawPP(id, difficultyBeatmap);
+                    LoadAcc();
+                    SetPPText(PPUtils.calculate_pp(_rawPP, _accuracy));
                 }
                 catch (Exception)
                 {
+                    Logger.log.Debug("error with difficulty for song {id}");
                     _ppText.SetText("-");
                 }
             }
@@ -91,9 +94,24 @@ namespace PP_Helper.UI
             return value.ToString() + "%";
         }
 
-        private void SetAccText()
+        [UIAction("changedAcc")]
+        private void ChangedAcc(float value)
         {
-            // Will fetch acc from saved accs
+            _accuracy = value;
+            SetPPText(PPUtils.calculate_pp(_rawPP, value));
+        }
+
+        private void SetPPText(float ppValue)
+        {
+            string ppText = ppValue.ToString("0.00");
+            _ppText.SetText($"{ppText} (<color=\"green\">+{ppValue}</color>)");
+        }
+
+
+        private void LoadAcc()
+        {
+            _accuracy = 85.0f;
+            _parserParams.EmitEvent("setAcc");
         }
     }
 }

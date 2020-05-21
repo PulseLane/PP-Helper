@@ -1,4 +1,5 @@
 ﻿using PP_Helper.UI;
+using PP_Helper.Utils;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
@@ -21,25 +22,13 @@ namespace PP_Helper
             GameObject.DontDestroyOnLoad(this); // Don't destroy this object on scene changes
             instance = this;
             Logger.log?.Debug($"{name}: Awake()");
-
         }
 
         public static void OnLoad()
         {
             if (instance == null)
                 new GameObject("PP_HelperController").AddComponent<PP_HelperController>();
-
-            var soloFreePlayButton = Resources.FindObjectsOfTypeAll<Button>().First(x => x.name == "SoloFreePlayButton");
-            soloFreePlayButton.onClick.AddListener(() =>
-            {
-                Initialize();
-            });
-        }
-
-        private static void Initialize()
-        {
-            if (ppDisplay.instance != null)
-                ppDisplay.instance.Setup();
+            ppDisplay.instance.Setup();
         }
 
         public void Refresh()

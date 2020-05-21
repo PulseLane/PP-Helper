@@ -49,6 +49,7 @@ namespace PP_Helper
             PP_HelperController.OnLoad();
             if (!RawPPLoader.IsInit())
                 RawPPLoader.Initialize();
+            PPUtils.Initialize();
         }
 
         public void OnLevelSelected(LevelCollectionViewController levelCollectionViewController, IPreviewBeatmapLevel previewBeatmapLevel)
