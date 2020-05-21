@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using PP_Helper.UI;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,7 +8,6 @@ namespace PP_Helper
     public class PP_HelperController : MonoBehaviour
     {
         public static PP_HelperController instance { get; private set; }
-        private static PPLevelSelectDisplay _ppLevelSelectDisplay;
         private string _id;
 
         private void Awake()
@@ -38,12 +38,13 @@ namespace PP_Helper
 
         private static void Initialize()
         {
-            _ppLevelSelectDisplay = new PPLevelSelectDisplay();
+            if (ppDisplay.instance != null)
+                ppDisplay.instance.Setup();
         }
 
         public void Refresh()
         {
-            _ppLevelSelectDisplay.showPP(_id);
+            ppDisplay.instance.Refresh(_id);
         }
 
         public void setId(string id)
