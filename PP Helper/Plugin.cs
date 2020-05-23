@@ -50,6 +50,7 @@ namespace PP_Helper
             if (!RawPPLoader.IsInit())
                 RawPPLoader.Initialize();
             PPUtils.Initialize();
+            ProfileDataLoader.Initialize();
         }
 
         public void OnLevelSelected(LevelCollectionViewController levelCollectionViewController, IPreviewBeatmapLevel previewBeatmapLevel)

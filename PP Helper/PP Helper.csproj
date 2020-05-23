@@ -97,16 +97,22 @@
     <Reference Include="UnityEngine.UI">
       <HintPath>F:\Steam\steamapps\common\Beat Saber\Beat Saber_Data\Managed\UnityEngine.UI.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.UnityWebRequestModule">
+      <HintPath>F:\Steam\steamapps\common\Beat Saber\Beat Saber_Data\Managed\UnityEngine.UnityWebRequestModule.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HarmonyPatches\StandardLevelDetailViewRefreshContent.cs" />
+    <Compile Include="JSON\ProfileDataLoader.cs" />
     <Compile Include="JSON\RawPPLoader.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="PP_HelperController.cs" />
+    <Compile Include="JSON\ProfileDownloader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UI\ppDisplay.cs" />
     <Compile Include="Utils\PPUtils.cs" />
+    <Compile Include="Utils\ScoreSaberUtils.cs" />
     <Compile Include="Utils\SongDataUtils.cs" />
   </ItemGroup>
   <ItemGroup>

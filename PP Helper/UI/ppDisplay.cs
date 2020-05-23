@@ -32,6 +32,7 @@ namespace PP_Helper.UI
         private StandardLevelDetailView _standardLevelDetailView;
         private static GameObject _parentObject;
         private float _rawPP = 0f;
+        private ProfileDataLoader.SongID _id;
 
         internal void Setup()
         {
@@ -66,14 +67,15 @@ namespace PP_Helper.UI
         {
             if (RawPPLoader.InDict(id))
             {
-                // Will fail if difficulty is unknown - set to default in '-' in that case
+                // Will fail if difficulty is unknown - set to default '-' in that case
                 try
                 {
                     _parentObject.SetActive(true);
                     IDifficultyBeatmap difficultyBeatmap = _standardLevelDetailView.selectedDifficultyBeatmap;
+                    _id = new ProfileDataLoader.SongID(id, difficultyBeatmap.difficulty);
                     _rawPP = RawPPLoader.GetRawPP(id, difficultyBeatmap);
                     LoadAcc();
-                    SetPPText(PPUtils.calculate_pp(_rawPP, _accuracy));
+                    SetPPText(PPUtils.CalculatePP(_rawPP, _accuracy));
                 }
                 catch (Exception)
                 {
@@ -98,13 +100,16 @@ namespace PP_Helper.UI
         private void ChangedAcc(float value)
         {
             _accuracy = value;
-            SetPPText(PPUtils.calculate_pp(_rawPP, value));
+            SetPPText(PPUtils.CalculatePP(_rawPP, value));
         }
 
         private void SetPPText(float ppValue)
         {
             string ppText = ppValue.ToString("0.00");
-            _ppText.SetText($"{ppText} (<color=\"green\">+{ppValue}</color>)");
+            var ppGain = PPUtils.GetPPGain(ppValue, _id);
+            string ppGainText = ppGain.ToString("0.00");
+            var color = ppGain > 0 ? "green" : "red";
+            _ppText.SetText($"{ppText} (<color=\"{color}\">+{ppGain}</color>)");
         }
 
 
