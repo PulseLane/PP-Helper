@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using HarmonyLib;
 using IPA;
 using PP_Helper.JSON;
+using PP_Helper.UI;
 using PP_Helper.Utils;
 using UnityEngine;
 using IPALogger = IPA.Logging.Logger;
@@ -12,6 +14,7 @@ namespace PP_Helper
     [Plugin(RuntimeOptions.DynamicInit)]
     public class Plugin
     {
+        public static readonly string DIRECTORY = Path.Combine(Environment.CurrentDirectory, "UserData", "PP Helper");
         // To be used at some point?
         List<SongDataCore.BeatStar.BeatStarSongDifficultyStats> stats;
 
@@ -35,13 +38,28 @@ namespace PP_Helper
             try
             {
                 harmony.PatchAll(System.Reflection.Assembly.GetExecutingAssembly());
-            } catch (Exception ex)
+            } catch (Exception e)
             {
-                Logger.log.Error($"Failed to apply harmony patches! {ex}");
+                Logger.log.Error($"Failed to apply harmony patches! {e}");
             }
 
             BS_Utils.Utilities.BSEvents.lateMenuSceneLoadedFresh += OnMenuSceneLoadedFresh;
             BS_Utils.Utilities.BSEvents.levelSelected += OnLevelSelected;
+            if (!Directory.Exists(DIRECTORY))
+            {
+                Logger.log.Info("Didn't find PP Helper directory in UserData, creating now");
+                try
+                {
+                    var di = Directory.CreateDirectory((DIRECTORY));
+                    Logger.log.Info("Successfully created folder");
+                }
+                catch (Exception e)
+                {
+                    Logger.log.Error($"Failed to create directory: {e}");
+                }
+            }
+
+            PP_HelperMenuUI.CreateUI();
         }
 
         public void OnMenuSceneLoadedFresh(ScenesTransitionSetupDataSO transitionSetupDataSO)

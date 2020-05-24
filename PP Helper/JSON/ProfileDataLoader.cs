@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json;
 using PP_Helper.Utils;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
@@ -108,7 +107,7 @@ namespace PP_Helper.JSON
             }
         }
 
-        private static string FILE_NAME = Path.Combine(Environment.CurrentDirectory, "UserData", "PP Helper", "ProfileData.json");
+        private static string FILE_NAME = Path.Combine(Plugin.DIRECTORY, "ProfileData.json");
 
         public static Dictionary<SongID, SongData> songDataInfo = new Dictionary<SongID, SongData>();
         public static Dictionary<SongID, int> songIndex = new Dictionary<SongID, int>();
@@ -117,7 +116,9 @@ namespace PP_Helper.JSON
         public static List<double> ppTopBottomSum;
         // index i is the sum of weighted pp plays #(i+1) .. #1
         public static List<double> ppBottomUpSum;
+
         private static DateTime _lastUpdateTime = DateTime.MinValue;
+        private static bool _downloading = false;
 
         public static void Initialize()
         {
@@ -135,6 +136,7 @@ namespace PP_Helper.JSON
                 LoadProfileData();
             } catch (Exception e)
             {
+                _downloading = false;
                 Logger.log.Error(e.Message);
             }
         }
@@ -145,6 +147,12 @@ namespace PP_Helper.JSON
                 Logger.log.Info("Fetched data too soon, not refetching");
                 return;
             }
+            if (_downloading)
+            {
+                Logger.log.Info("In the middle of downloading or processing data, not refetching");
+                return;
+            }
+            _downloading = true;
             var user = BS_Utils.Gameplay.GetUserInfo.GetUserID();
             Logger.log.Info($"Fetching scoresaber data for user {user}");
 
@@ -156,13 +164,15 @@ namespace PP_Helper.JSON
 
         private static void OnPageFinished(int page)
         {
-            Logger.log.Info($"Downloaded page {page}");
+            Logger.log.Debug($"Downloaded page {page}");
         }
 
         private static void OnProfileDataFinished(List<SongPage> pages)
         {
             Logger.log.Debug("Finished collecting data - processing now");
             _lastUpdateTime = DateTime.Now;
+            if (songDataInfo.Count > 0)
+                songDataInfo = new Dictionary<SongID, SongData>();
             // Update dict with all of the info
             foreach (SongPage songPage in pages)
             {
@@ -188,10 +198,12 @@ namespace PP_Helper.JSON
             // order by smallest weight to largest
             var songDataInfoList = songDataInfo.OrderBy(x => x.Value.weight).ToList();
 
-            if (ppTopBottomSum == null)
-                ppTopBottomSum = new List<double>(new double[songDataInfoList.Count]);
-            if (ppBottomUpSum == null)
-                ppBottomUpSum = new List<double>(new double[songDataInfoList.Count]);
+            ppTopBottomSum = new List<double>(new double[songDataInfoList.Count]);
+            ppBottomUpSum = new List<double>(new double[songDataInfoList.Count]);
+            if (songOrder.Count > 0)
+                songOrder = new List<SongID>();
+            if (songIndex.Count > 0)
+                songIndex = new Dictionary<SongID, int>();
 
             Logger.log.Debug("Created lists");
             // First calculate top-bottom sum
@@ -222,6 +234,7 @@ namespace PP_Helper.JSON
                 i++;
             }
             Logger.log.Debug("Calculated bottom-up");
+            _downloading = false;
         }
 
         private static void SaveSongData()
