@@ -63,32 +63,32 @@ namespace PP_Helper.Utils
 
         public static float GetPPGain(float pp, ProfileDataLoader.SongID id)
         {
-            if (ProfileDataLoader.ppTopBottomSum == null || ProfileDataLoader.ppBottomUpSum == null)
+            if (ProfileDataLoader.instance.ppTopBottomSum == null || ProfileDataLoader.instance.ppBottomUpSum == null)
             {
                 return 0;
             }
 
-            var ppTotal = ProfileDataLoader.ppTopBottomSum[0];
+            var ppTotal = ProfileDataLoader.instance.ppTopBottomSum[0];
             int oldIndex = -1;
 
             Logger.log.Debug($"old total: {ppTotal}");
             // See if song has already been played
-            if (ProfileDataLoader.songIndex.ContainsKey(id))
+            if (ProfileDataLoader.instance.songIndex.ContainsKey(id))
             {
                 Logger.log.Debug("Song has been played before");
                 // Not a higher play, worth nothing
-                if (pp <= ProfileDataLoader.songDataInfo[id].pp)
+                if (pp <= ProfileDataLoader.instance.songDataInfo[id].pp)
                 {
                     return 0;
                 }
-                oldIndex = ProfileDataLoader.songIndex[id];
+                oldIndex = ProfileDataLoader.instance.songIndex[id];
             }
             // Find first song that it's worth more than
 
             var i = 0;
-            foreach (var song in ProfileDataLoader.songOrder)
+            foreach (var song in ProfileDataLoader.instance.songOrder)
             {
-                var songWorth = ProfileDataLoader.songDataInfo[song].pp;
+                var songWorth = ProfileDataLoader.instance.songDataInfo[song].pp;
                 if (songWorth < pp)
                 {
                     var newSum = CalculateNewPPTotal(pp, i, oldIndex);
@@ -98,7 +98,7 @@ namespace PP_Helper.Utils
             }
 
             // Not worth more than any song already played
-            return (float)(Math.Pow(FALLOFF_RATE, ProfileDataLoader.songOrder.Count) * pp);
+            return (float)(Math.Pow(FALLOFF_RATE, ProfileDataLoader.instance.songOrder.Count) * pp);
         }
 
         // calculate how much percentage of the raw pp a given percentage is worth
@@ -141,7 +141,7 @@ namespace PP_Helper.Utils
                 throw new ArgumentException();
             double smallerPlays;
             // Last song - nothing is worth less
-            if (oldIndex == index && index == ProfileDataLoader.songIndex.Count - 1)
+            if (oldIndex == index && index == ProfileDataLoader.instance.songIndex.Count - 1)
             {
                 smallerPlays = 0;
             }
@@ -150,13 +150,13 @@ namespace PP_Helper.Utils
                 // If a new play, then push down every song below it
                 if (oldIndex == -1)
                 {
-                    smallerPlays = FALLOFF_RATE * ProfileDataLoader.ppTopBottomSum[index];
+                    smallerPlays = FALLOFF_RATE * ProfileDataLoader.instance.ppTopBottomSum[index];
                 }
                 // otherwise, remove old play and push down songs below new index
                 else
                 {
-                    var oldValues = oldIndex < ProfileDataLoader.songIndex.Count - 1 ? ProfileDataLoader.ppTopBottomSum[oldIndex + 1] : 0;
-                    var midValues = ProfileDataLoader.ppTopBottomSum[index] - ProfileDataLoader.ppTopBottomSum[oldIndex];
+                    var oldValues = oldIndex < ProfileDataLoader.instance.songIndex.Count - 1 ? ProfileDataLoader.instance.ppTopBottomSum[oldIndex + 1] : 0;
+                    var midValues = ProfileDataLoader.instance.ppTopBottomSum[index] - ProfileDataLoader.instance.ppTopBottomSum[oldIndex];
                     smallerPlays = FALLOFF_RATE * midValues + oldValues;
                 }
             }
@@ -169,7 +169,7 @@ namespace PP_Helper.Utils
                 largerPlays = 0;
             }
             else
-                largerPlays = ProfileDataLoader.ppBottomUpSum[index - 1];
+                largerPlays = ProfileDataLoader.instance.ppBottomUpSum[index - 1];
 
             Logger.log.Debug($"Larger play: {largerPlays}");
 

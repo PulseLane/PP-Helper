@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using BeatSaberMarkupLanguage.Settings;
 using HarmonyLib;
 using IPA;
 using PP_Helper.JSON;
@@ -34,6 +35,8 @@ namespace PP_Helper
         [OnEnable]
         public void OnEnable()
         {
+            Config.Read();
+
             harmony = new Harmony("com.PulseLane.BeatSaber.PP_Helper");
             try
             {
@@ -43,8 +46,6 @@ namespace PP_Helper
                 Logger.log.Error($"Failed to apply harmony patches! {e}");
             }
 
-            BS_Utils.Utilities.BSEvents.lateMenuSceneLoadedFresh += OnMenuSceneLoadedFresh;
-            BS_Utils.Utilities.BSEvents.levelSelected += OnLevelSelected;
             if (!Directory.Exists(DIRECTORY))
             {
                 Logger.log.Info("Didn't find PP Helper directory in UserData, creating now");
@@ -59,6 +60,10 @@ namespace PP_Helper
                 }
             }
 
+            BS_Utils.Utilities.BSEvents.lateMenuSceneLoadedFresh += OnMenuSceneLoadedFresh;
+            BS_Utils.Utilities.BSEvents.levelSelected += OnLevelSelected;
+            BSMLSettings.instance.AddSettingsMenu("PP Helper", "PP_Helper.UI.settings.bsml", Settings.instance);
+
             PP_HelperMenuUI.CreateUI();
         }
 
@@ -68,7 +73,7 @@ namespace PP_Helper
             if (!RawPPLoader.IsInit())
                 RawPPLoader.Initialize();
             PPUtils.Initialize();
-            ProfileDataLoader.Initialize();
+            ProfileDataLoader.instance.Initialize();
         }
 
         public void OnLevelSelected(LevelCollectionViewController levelCollectionViewController, IPreviewBeatmapLevel previewBeatmapLevel)
@@ -83,6 +88,7 @@ namespace PP_Helper
                 GameObject.Destroy(PluginController);
             BS_Utils.Utilities.BSEvents.lateMenuSceneLoadedFresh -= OnMenuSceneLoadedFresh;
             BS_Utils.Utilities.BSEvents.levelSelected -= OnLevelSelected;
+            BSMLSettings.instance.RemoveSettingsMenu(Settings.instance);
             harmony.UnpatchAll("com.PulseLane.BeatSaber.PP_Helper");
         }
     }

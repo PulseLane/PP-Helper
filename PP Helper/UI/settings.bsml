@@ -1,0 +1,4 @@
+﻿<settings-container>
+  <increment-setting text="Default Accuracy" value="defaultAcc" hover-hint="The default accuracy to use when there is no average acc or song-specific value" min="0" max="100" increment="0.1"></increment-setting>
+  <increment-setting text="Average Acc. Star Range" value="starRange" hover-hint="How wide the star range should be when calculating your avg. acc" min="0.1" max="2" increment="0.05"></increment-setting>
+</settings-container>

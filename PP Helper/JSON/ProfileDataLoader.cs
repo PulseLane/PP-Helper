@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace PP_Helper.JSON
 {
-    public static class ProfileDataLoader
+    public class ProfileDataLoader : PersistentSingleton<ProfileDataLoader>
     {
         public class ProfileData
         {
@@ -107,20 +107,20 @@ namespace PP_Helper.JSON
             }
         }
 
-        private static string FILE_NAME = Path.Combine(Plugin.DIRECTORY, "ProfileData.json");
+        private readonly string FILE_NAME = Path.Combine(Plugin.DIRECTORY, "ProfileData.json");
 
-        public static Dictionary<SongID, SongData> songDataInfo = new Dictionary<SongID, SongData>();
-        public static Dictionary<SongID, int> songIndex = new Dictionary<SongID, int>();
-        public static List<SongID> songOrder = new List<SongID>();
+        public Dictionary<SongID, SongData> songDataInfo = new Dictionary<SongID, SongData>();
+        public Dictionary<SongID, int> songIndex = new Dictionary<SongID, int>();
+        public List<SongID> songOrder = new List<SongID>();
         // index i is the sum of weighted pp plays #(i+1) .. #N
-        public static List<double> ppTopBottomSum;
+        public List<double> ppTopBottomSum;
         // index i is the sum of weighted pp plays #(i+1) .. #1
-        public static List<double> ppBottomUpSum;
+        public List<double> ppBottomUpSum;
 
-        private static DateTime _lastUpdateTime = DateTime.MinValue;
-        private static bool _downloading = false;
+        private DateTime _lastUpdateTime = DateTime.MinValue;
+        private bool _downloading = false;
 
-        public static void Initialize()
+        public void Initialize()
         {
             Logger.log.Debug("Beginning initialization of profile data");
             // Try to load from file, if not available - load from scoresaber
@@ -140,7 +140,7 @@ namespace PP_Helper.JSON
                 Logger.log.Error(e.Message);
             }
         }
-        public static void LoadProfileData()
+        public void LoadProfileData()
         {
             if (_lastUpdateTime.AddMinutes(1) > DateTime.Now)
             {
@@ -162,12 +162,12 @@ namespace PP_Helper.JSON
             profileDownloader.OnProfileDataFinished += OnProfileDataFinished;
         }
 
-        private static void OnPageFinished(int page)
+        private void OnPageFinished(int page)
         {
             Logger.log.Debug($"Downloaded page {page}");
         }
 
-        private static void OnProfileDataFinished(List<SongPage> pages)
+        private void OnProfileDataFinished(List<SongPage> pages)
         {
             Logger.log.Debug("Finished collecting data - processing now");
             _lastUpdateTime = DateTime.Now;
@@ -192,7 +192,7 @@ namespace PP_Helper.JSON
         }
 
         // Go through _songDataInfo and calculate the pp sums
-        private static void CalculateSums()
+        private void CalculateSums()
         {
             Logger.log.Debug("Beginning to calculate sums");
             // order by smallest weight to largest
@@ -237,7 +237,7 @@ namespace PP_Helper.JSON
             _downloading = false;
         }
 
-        private static void SaveSongData()
+        private void SaveSongData()
         {
             Logger.log.Debug("Saving data to file");
             File.WriteAllText(FILE_NAME, JsonConvert.SerializeObject(songDataInfo));

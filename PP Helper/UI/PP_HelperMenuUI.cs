@@ -15,7 +15,7 @@ namespace PP_Helper.UI
 
         internal static void ProfileRefresh()
         {
-            ProfileDataLoader.LoadProfileData();
+            ProfileDataLoader.instance.LoadProfileData();
         }
         
         internal static void StarRefresh()
