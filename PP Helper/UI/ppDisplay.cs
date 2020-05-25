@@ -77,7 +77,8 @@ namespace PP_Helper.UI
                 }
                 catch (Exception)
                 {
-                    Logger.log.Debug("error with difficulty for song {id}");
+                    Logger.log.Debug($"error with difficulty for song {id}");
+                    _parentObject.SetActive(false);
                     _ppText.SetText("-");
                 }
             }

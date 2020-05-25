@@ -77,8 +77,8 @@ namespace PP_Helper.Utils
                 }
                 oldIndex = ProfileDataLoader.instance.songIndex[id];
             }
-            // Find first song that it's worth more than
 
+            // Find first song that it's worth more than
             var i = 0;
             foreach (var song in ProfileDataLoader.instance.songOrder)
             {

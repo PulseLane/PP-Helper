@@ -1,14 +1,18 @@
 ﻿using BeatSaberMarkupLanguage.Settings;
 using HarmonyLib;
 using IPA;
+using IPA.Loader;
 using PP_Helper.Data;
 using PP_Helper.UI;
 using PP_Helper.Utils;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEngine;
 using IPALogger = IPA.Logging.Logger;
+using CountersPlus.Custom;
+using PP_Helper.Counters;
 
 namespace PP_Helper
 {
@@ -63,9 +67,19 @@ namespace PP_Helper
 
             BS_Utils.Utilities.BSEvents.lateMenuSceneLoadedFresh += OnMenuSceneLoadedFresh;
             BS_Utils.Utilities.BSEvents.levelSelected += OnLevelSelected;
+            BS_Utils.Utilities.BSEvents.gameSceneActive += OnGameSceneActive;
             BSMLSettings.instance.AddSettingsMenu("PP Helper", "PP_Helper.UI.settings.bsml", Settings.instance);
 
             PP_HelperMenuUI.CreateUI();
+
+            // Counters+ integration
+            if (PluginManager.EnabledPlugins.Any(x => x.Id == "Counters+"))
+            {
+                Logger.log.Info("Counters+ installed, setting up PP counter");
+                AddPPCounter();
+            }
+            else
+                Logger.log.Debug("Counters+ not installed");
         }
 
         public void OnMenuSceneLoadedFresh(ScenesTransitionSetupDataSO transitionSetupDataSO)
@@ -83,15 +97,39 @@ namespace PP_Helper
             PP_HelperController.instance.setId(SongDataUtils.GetHash(previewBeatmapLevel.levelID));
         }
 
+        public void OnGameSceneActive()
+        {
+            new GameObject("PP Counter").AddComponent<PPCounter>();
+        }
+
         [OnDisable]
         public void OnDisable()
         {
             if (PluginController != null)
                 GameObject.Destroy(PluginController);
+
             BS_Utils.Utilities.BSEvents.lateMenuSceneLoadedFresh -= OnMenuSceneLoadedFresh;
             BS_Utils.Utilities.BSEvents.levelSelected -= OnLevelSelected;
+            BS_Utils.Utilities.BSEvents.gameSceneActive -= OnGameSceneActive;
+
             BSMLSettings.instance.RemoveSettingsMenu(Settings.instance);
             harmony.UnpatchAll("com.PulseLane.BeatSaber.PP_Helper");
+            // TODO: Clean up singletones
+            // TODO: remove counter
         }
+
+        private void AddPPCounter()
+        {
+            CustomCounter counter = new CustomCounter
+            {
+                SectionName = "PPHelperCounter",
+                Name = "PP",
+                BSIPAMod = PluginManager.EnabledPlugins.First(x => x.Name == Name),
+                Counter = "PP Counter",
+                Description = "Shows how much pp your current accuracy is worth on a ranked map"
+            };
+            CustomCounterCreator.Create(counter);
+        }
+
     }
 }

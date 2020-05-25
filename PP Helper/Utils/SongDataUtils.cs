@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PP_Helper.Data;
+using System;
 using System.Collections.Generic;
 using static PP_Helper.Data.ProfileDataLoader;
 
@@ -62,6 +63,11 @@ namespace PP_Helper.Utils
         public static double GetRoundedUpStars(double star)
         {
             return Math.Round(Math.Ceiling(star / Config.starRange) * Config.starRange, 2);
+        }
+
+        public static bool IsRankedSong(SongID songID)
+        {
+            return RawPPLoader.InDict(songID.id);
         }
     }
 }
