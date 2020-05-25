@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static PP_Helper.JSON.StarAccCalculator;
+using static PP_Helper.Data.StarAccCalculator;
 
 namespace PP_Helper
 {

@@ -1,9 +1,9 @@
 ﻿using BeatSaberMarkupLanguage.Attributes;
-using PP_Helper.JSON;
+using PP_Helper.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using static PP_Helper.JSON.StarAccCalculator;
+using static PP_Helper.Data.StarAccCalculator;
 
 namespace PP_Helper.UI
 {

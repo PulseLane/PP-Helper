@@ -6,7 +6,7 @@ using System.Linq;
 using System.Net;
 using UnityEngine;
 using UnityEngine.Networking;
-using static PP_Helper.JSON.ProfileDataLoader;
+using static PP_Helper.Data.ProfileDataLoader;
 
 namespace PP_Helper
 {

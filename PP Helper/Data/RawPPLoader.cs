@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace PP_Helper.JSON
+namespace PP_Helper.Data
 {
     // All diffs are solostandard, but just in case some 360/90/one-handed/etc. gets ranked at some point
     public class RawPPData

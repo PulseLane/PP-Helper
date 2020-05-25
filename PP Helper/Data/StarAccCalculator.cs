@@ -6,7 +6,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 
-namespace PP_Helper.JSON
+namespace PP_Helper.Data
 {
     public static class StarAccCalculator
     {

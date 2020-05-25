@@ -8,7 +8,7 @@ using System.IO;
 using System.Linq;
 using UnityEngine;
 
-namespace PP_Helper.JSON
+namespace PP_Helper.Data
 {
     public class ProfileDataLoader : PersistentSingleton<ProfileDataLoader>
     {

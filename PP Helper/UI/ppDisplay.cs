@@ -3,7 +3,7 @@ using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.Parser;
 using BS_Utils.Utilities;
-using PP_Helper.JSON;
+using PP_Helper.Data;
 using PP_Helper.Utils;
 using System;
 using System.Collections.Generic;
