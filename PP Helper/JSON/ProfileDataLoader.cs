@@ -40,11 +40,13 @@ namespace PP_Helper.JSON
 
         public class SongData
         {
+            public double acc;
             public double pp;
             public double weight;
 
-            public SongData(double pp, double weight)
+            public SongData(double acc, double pp, double weight)
             {
+                this.acc = acc;
                 this.pp = pp;
                 this.weight = weight;
             }
@@ -180,10 +182,11 @@ namespace PP_Helper.JSON
                 {
                     string id = data.id;
                     double acc = (double) data.score / (double) data.maxScoreEx;
+                    acc = acc.Equals(Double.PositiveInfinity) ? 1 : acc;
                     double pp = data.pp;
                     double weight = data.weight;
                     string diff = data.diff;
-                    songDataInfo[new SongID(id, diff)] = new SongData(pp, weight);
+                    songDataInfo[new SongID(id, diff)] = new SongData(acc, pp, weight);
                 }
             }
 
@@ -235,6 +238,11 @@ namespace PP_Helper.JSON
             }
             Logger.log.Debug("Calculated bottom-up");
             _downloading = false;
+
+            if (!File.Exists(StarAccCalculator.FILE_NAME) && SongDataCore.Plugin.Songs.IsDataAvailable())
+            {
+                StarAccCalculator.CalculateAcc();
+            }
         }
 
         private void SaveSongData()

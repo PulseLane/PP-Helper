@@ -106,6 +106,7 @@
     <Compile Include="HarmonyPatches\StandardLevelDetailViewRefreshContent.cs" />
     <Compile Include="JSON\ProfileDataLoader.cs" />
     <Compile Include="JSON\RawPPLoader.cs" />
+    <Compile Include="JSON\StarAccCalculator.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="PP_HelperController.cs" />

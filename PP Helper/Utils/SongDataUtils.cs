@@ -4,7 +4,6 @@ namespace PP_Helper.Utils
 {
     static class SongDataUtils
     {
-        // May need this for getting star data?
         private static Dictionary<BeatmapDifficulty, string> _difficultyDict = new Dictionary<BeatmapDifficulty, string>()
         {
             {BeatmapDifficulty.Easy, "Easy" },

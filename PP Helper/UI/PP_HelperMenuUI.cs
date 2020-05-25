@@ -20,7 +20,7 @@ namespace PP_Helper.UI
         
         internal static void StarRefresh()
         {
-
+            StarAccCalculator.CalculateAcc();
         }
     }
 }
