@@ -19,11 +19,13 @@ namespace PP_Helper.UI
         private BSMLParserParams _parserParams;
 
         [UIComponent("pp")]
-        public TextMeshProUGUI _ppText;
+        private TextMeshProUGUI _ppText;
         [UIObject("accuracy")]
-        public GameObject _accuracyObject;
+        private GameObject _accuracyObject;
         [UIValue("accuracyValue")]
-        public float _accuracy = 85f;
+        private float _accuracy = 85f;
+        [UIValue("accIncrement")]
+        public float accIncrement = Config.accIncrement;
 
         private StandardLevelDetailView _standardLevelDetailView;
         private static GameObject _parentObject;
@@ -89,20 +91,36 @@ namespace PP_Helper.UI
         [UIAction("accFormat")]
         public string AccFormat(float value)
         {
-            return value.ToString() + "%";
+            return Math.Round(value, 2).ToString() + "%";
         }
 
         [UIAction("changedAcc")]
         private void ChangedAcc(float value)
         {
+            value = (float) Math.Round(value, 2);
             _accuracy = value;
             SetPPText(PPUtils.CalculatePP(_rawPP, value));
         }
 
+        [UIAction("saveButtonPressed")]
+        private void SaveButtonPressed()
+        {
+            Logger.log.Debug($"Saving song-specific accuracy for {_id}: {_accuracy}");
+            AccLoader.instance.SaveAcc(_id, _accuracy);
+        }
+
+        [UIAction("loadButtonPressed")]
+        private void LoadButtonPressed()
+        {
+            Logger.log.Debug($"Loading star accuracy for {_id}");
+            AccLoader.instance.ClearAcc(_id);
+            LoadAcc();
+        }
+
         private void SetPPText(float ppValue)
         {
-            string ppText = ppValue.ToString("0.00");
-            var ppGain = PPUtils.GetPPGain(ppValue, _id);
+            string ppText = Math.Round(ppValue, 2).ToString("0.00");
+            var ppGain = Math.Round(PPUtils.GetPPGain(ppValue, _id), 2);
             string ppGainText = ppGain.ToString("0.00");
             var color = ppGain > 0 ? "green" : "red";
             _ppText.SetText($"{ppText} (<color=\"{color}\">+{ppGain}</color>)");

@@ -9,7 +9,7 @@ namespace PP_Helper.Data
 {
     public class AccLoader : PersistentSingleton<AccLoader>
     {
-        private static readonly string SPECIFIC_ACC_FILE = Path.Combine(Plugin.DIRECTORY, "SongSpecificAcc.json");
+        private static readonly string SONG_SPECIFIC_ACC_FILE = Path.Combine(Plugin.DIRECTORY, "SongSpecificAcc.json");
         private Dictionary<SongID, float> _songSpecificAcc = new Dictionary<SongID, float>();
         private Dictionary<double, double> _starAcc = new Dictionary<double, double>();
 
@@ -19,7 +19,7 @@ namespace PP_Helper.Data
             // Try to load from file, if not available - load from scoresaber
             try
             {
-                _songSpecificAcc = JsonConvert.DeserializeObject<Dictionary<SongID, float>>(File.ReadAllText(SPECIFIC_ACC_FILE));
+                _songSpecificAcc = JsonConvert.DeserializeObject<Dictionary<SongID, float>>(File.ReadAllText(SONG_SPECIFIC_ACC_FILE));
             }
             catch (FileNotFoundException)
             {
@@ -61,7 +61,8 @@ namespace PP_Helper.Data
 
         private static float RoundedAcc(double acc)
         {
-            return (float) Math.Round(acc * 100, 2);
+            // Round to nearest multiple of accIncrement
+            return (float) Math.Round(Math.Floor(acc * 100 / Config.accIncrement) * Config.accIncrement, 2);
         }
 
         internal void LoadStarAcc()
@@ -79,6 +80,23 @@ namespace PP_Helper.Data
             {
                 Logger.log.Error($"Error loading star accuracy: {e}");
             }
+        }
+
+        internal void SaveAcc(SongID id, float accuracy)
+        {
+            _songSpecificAcc.Add(id, accuracy / 100);
+            WriteSongSpecificAccuracy();
+        }
+
+        internal void ClearAcc(SongID id)
+        {
+            _songSpecificAcc.Remove(id);
+            WriteSongSpecificAccuracy();
+        }
+
+        private void WriteSongSpecificAccuracy()
+        {
+            File.WriteAllText(SONG_SPECIFIC_ACC_FILE, JsonConvert.SerializeObject(_songSpecificAcc));
         }
     }
 }

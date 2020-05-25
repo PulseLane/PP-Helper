@@ -20,6 +20,19 @@ namespace PP_Helper.UI
             }
         }
 
+        [UIValue("accIncrement")]
+        public float accIncrement
+        {
+            get => Config.accIncrement;
+            set
+            {
+                value = (float) Math.Round(value, 2);
+                Config.accIncrement = value;
+                ppDisplay.instance.accIncrement = value;
+                Config.Write();
+            }
+        }
+
         [UIValue("starRange")]
         public float starRange
         {
