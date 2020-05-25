@@ -17,7 +17,7 @@ namespace PP_Helper.UI
         {
             ProfileDataLoader.instance.LoadProfileData();
         }
-        
+
         internal static void StarRefresh()
         {
             StarAccCalculator.CalculateAcc();

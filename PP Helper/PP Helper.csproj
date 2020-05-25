@@ -103,6 +103,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Config.cs" />
+    <Compile Include="Data\AccLoader.cs" />
     <Compile Include="HarmonyPatches\StandardLevelDetailViewRefreshContent.cs" />
     <Compile Include="Data\ProfileDataLoader.cs" />
     <Compile Include="Data\RawPPLoader.cs" />

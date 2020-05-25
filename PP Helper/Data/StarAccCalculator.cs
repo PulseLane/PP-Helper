@@ -2,7 +2,6 @@
 using PP_Helper.Utils;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
 
@@ -43,7 +42,7 @@ namespace PP_Helper.Data
             switch (calculationTypeString)
             {
                 case AverageOfTopNString:
-                    calculationType =  CalculationType.AverageOfTopN;
+                    calculationType = CalculationType.AverageOfTopN;
                     return true;
                 case AverageOfAllString:
                     calculationType = CalculationType.AverageOfAll;
@@ -77,56 +76,42 @@ namespace PP_Helper.Data
             var averageAll = Config.starAccChoice.Equals(CalculationType.AverageOfAll);
 
             // Initialize dicts
-            for (double star = 0.00; star < maxStarValue; star+=0.25)
+            for (double star = 0.00; star < maxStarValue; star += 0.25)
             {
-                star = RoundedUpStarValue(star);
+                star = SongDataUtils.GetRoundedDownStars(star);
                 acc[star] = 0;
                 counts[star] = 0;
             }
 
             foreach (var kvp in ProfileDataLoader.instance.songDataInfo)
             {
-                if (SongDataCore.Plugin.Songs.Data.Songs.TryGetValue(kvp.Key.id, out var song))
+                var star = SongDataUtils.GetStars(kvp.Key);
+                // Will definitely be updating acc
+                if (averageAll || counts[star] < numberOfScores)
                 {
-                    // Find corresponding difficulty
-                    var difficultyStats = SongDataCore.Plugin.Songs.Data.Songs[kvp.Key.id].diffs;
-                    foreach (var difficultyStat in difficultyStats)
+                    acc[star] = ((acc[star] * counts[star]) + kvp.Value.acc) / (counts[star] + 1);
+                    counts[star] += 1;
+                    // update maxScores
+                    if (!averageAll)
                     {
-                        if (difficultyStat.diff.Equals(SongDataUtils.getDifficultyAsString(kvp.Key.difficulty)))
+                        // first score for given star rating
+                        if (!maxScores.ContainsKey(star))
                         {
-                            
-                            var star = RoundedDownStarValue(difficultyStat.star);
-                            // Will definitely be updating acc
-                            if (averageAll || counts[star] < numberOfScores)
-                            {
-                                acc[star] = ((acc[star] * counts[star]) + kvp.Value.acc) / (counts[star] + 1);
-                                counts[star] += 1;
-                                // update maxScores
-                                if (!averageAll)
-                                {
-                                    // first score for given star rating
-                                    if (!maxScores.ContainsKey(star))
-                                    {
-                                        maxScores[star] = new List<double>();
-                                    }
-                                    maxScores[star].Add(kvp.Value.acc);
-                                    maxScores[star].Sort(); // List is small enough to not matter
-                                }
-                                break;
-                            }
-                            // Better than the lowest sore, update average acc
-                            else if (kvp.Value.acc > maxScores[star].First())
-                            {
-                                var accWithoutLowerScore = acc[star] * counts[star] - maxScores[star].First();
-                                acc[star] = (accWithoutLowerScore + kvp.Value.acc) / (counts[star]);
-                                // update maxScores
-                                maxScores[star].RemoveAt(0);
-                                maxScores[star].Add(kvp.Value.acc);
-                                maxScores[star].Sort();
-                                break;
-                            }
+                            maxScores[star] = new List<double>();
                         }
+                        maxScores[star].Add(kvp.Value.acc);
+                        maxScores[star].Sort(); // List is small enough to not matter
                     }
+                }
+                // Better than the lowest sore, update average acc
+                else if (kvp.Value.acc > maxScores[star].First())
+                {
+                    var accWithoutLowerScore = acc[star] * counts[star] - maxScores[star].First();
+                    acc[star] = (accWithoutLowerScore + kvp.Value.acc) / (counts[star]);
+                    // update maxScores
+                    maxScores[star].RemoveAt(0);
+                    maxScores[star].Add(kvp.Value.acc);
+                    maxScores[star].Sort();
                 }
             }
 
@@ -138,16 +123,16 @@ namespace PP_Helper.Data
         private static double CalculateMaxStarValue()
         {
             double maxStarValue = 0;
-            foreach(var kvp in ProfileDataLoader.instance.songDataInfo)
+            foreach (var kvp in ProfileDataLoader.instance.songDataInfo)
             {
                 if (SongDataCore.Plugin.Songs.Data.Songs.TryGetValue(kvp.Key.id, out var song))
                 {
                     var difficultyStats = SongDataCore.Plugin.Songs.Data.Songs[kvp.Key.id].diffs;
                     foreach (var difficultyStat in difficultyStats)
                     {
-                        if (difficultyStat.diff.Equals(SongDataUtils.getDifficultyAsString(kvp.Key.difficulty)))
+                        if (difficultyStat.diff.Equals(SongDataUtils.GetDifficultyAsString(kvp.Key.difficulty)))
                         {
-                            var star = RoundedUpStarValue(difficultyStat.star);
+                            var star = SongDataUtils.GetRoundedUpStars(difficultyStat.star);
                             maxStarValue = star > maxStarValue ? star : maxStarValue;
                         }
                     }
@@ -157,19 +142,10 @@ namespace PP_Helper.Data
             return Math.Round(maxStarValue, 2);
         }
 
-        private static double RoundedDownStarValue(double star)
-        {
-            return Math.Round(Math.Floor(star / Config.starRange) * Config.starRange, 2);
-        }
-
-        private static double RoundedUpStarValue(double star)
-        {
-            return Math.Round(Math.Ceiling(star / Config.starRange) * Config.starRange, 2);
-        }
-
         private static void SaveFile(Dictionary<double, double> starAcc)
         {
             File.WriteAllText(FILE_NAME, JsonConvert.SerializeObject(starAcc, Formatting.Indented));
+            AccLoader.instance.LoadStarAcc();
         }
     }
 }

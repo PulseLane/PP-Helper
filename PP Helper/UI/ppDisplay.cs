@@ -1,16 +1,12 @@
 ﻿using BeatSaberMarkupLanguage;
 using BeatSaberMarkupLanguage.Attributes;
-using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.Parser;
 using BS_Utils.Utilities;
 using PP_Helper.Data;
 using PP_Helper.Utils;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -46,13 +42,13 @@ namespace PP_Helper.UI
             // Add PP Helper UI
             BSMLParser.instance.Parse(BeatSaberMarkupLanguage.Utilities.GetResourceContent(Assembly.GetExecutingAssembly(), "PP_Helper.UI.ppDisplay.bsml"), playerStatsContainer.transform.parent.gameObject, this);
             _parentObject = _ppText.transform.parent.gameObject;
-            
+
             // Resize accuracy font size
             var _accText = _accuracyObject.GetComponentsInChildren<TextMeshProUGUI>().Last();
             _accText.fontSize = 3.5f;
 
             // Resize accuracy adjuster
-            var accTransform = (RectTransform) _accText.transform.parent.transform.parent.transform;
+            var accTransform = (RectTransform)_accText.transform.parent.transform.parent.transform;
             accTransform.sizeDelta = new Vector2(30f, 1f);
 
             // We want pp stuff above play stuff
@@ -115,7 +111,7 @@ namespace PP_Helper.UI
 
         private void LoadAcc()
         {
-            _accuracy = 85.0f;
+            _accuracy = AccLoader.instance.GetAcc(_id);
             _parserParams.EmitEvent("setAcc");
         }
     }

@@ -10,7 +10,7 @@ using static PP_Helper.Data.ProfileDataLoader;
 
 namespace PP_Helper
 {
-	public class ProfileDownloader : MonoBehaviour
+    public class ProfileDownloader : MonoBehaviour
     {
         private const string URI_PREFIX = "https://new.scoresaber.com/api/player/";
         private const int MAX_PAGE = 50;

@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using BeatSaberMarkupLanguage.Settings;
+﻿using BeatSaberMarkupLanguage.Settings;
 using HarmonyLib;
 using IPA;
 using PP_Helper.Data;
 using PP_Helper.UI;
 using PP_Helper.Utils;
+using System;
+using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using IPALogger = IPA.Logging.Logger;
 
@@ -41,7 +41,8 @@ namespace PP_Helper
             try
             {
                 harmony.PatchAll(System.Reflection.Assembly.GetExecutingAssembly());
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 Logger.log.Error($"Failed to apply harmony patches! {e}");
             }
@@ -74,11 +75,12 @@ namespace PP_Helper
                 RawPPLoader.Initialize();
             PPUtils.Initialize();
             ProfileDataLoader.instance.Initialize();
+            AccLoader.instance.Initialize();
         }
 
         public void OnLevelSelected(LevelCollectionViewController levelCollectionViewController, IPreviewBeatmapLevel previewBeatmapLevel)
         {
-            PP_HelperController.instance.setId(SongDataUtils.getHash(previewBeatmapLevel.levelID));
+            PP_HelperController.instance.setId(SongDataUtils.GetHash(previewBeatmapLevel.levelID));
         }
 
         [OnDisable]

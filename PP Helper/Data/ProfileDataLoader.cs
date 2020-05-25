@@ -136,7 +136,8 @@ namespace PP_Helper.Data
             catch (FileNotFoundException)
             {
                 LoadProfileData();
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 _downloading = false;
                 Logger.log.Error(e.Message);
@@ -181,7 +182,7 @@ namespace PP_Helper.Data
                 foreach (ProfileData data in songPage.scores)
                 {
                     string id = data.id;
-                    double acc = (double) data.score / (double) data.maxScoreEx;
+                    double acc = (double)data.score / (double)data.maxScoreEx;
                     acc = acc.Equals(Double.PositiveInfinity) ? 1 : acc;
                     double pp = data.pp;
                     double weight = data.weight;

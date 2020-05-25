@@ -1,11 +1,5 @@
-﻿using BeatSaberMarkupLanguage;
-using PP_Helper.Data;
+﻿using PP_Helper.Data;
 using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PP_Helper.Utils
 {
@@ -92,7 +86,7 @@ namespace PP_Helper.Utils
                 if (songWorth < pp)
                 {
                     var newSum = CalculateNewPPTotal(pp, i, oldIndex);
-                    return (float) (newSum - ppTotal);
+                    return (float)(newSum - ppTotal);
                 }
                 i++;
             }
