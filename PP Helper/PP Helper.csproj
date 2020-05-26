@@ -109,6 +109,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Config.cs" />
+    <Compile Include="Counters+\ConfigLoader.cs" />
     <Compile Include="Counters+\PPCounter.cs" />
     <Compile Include="Data\AccLoader.cs" />
     <Compile Include="HarmonyPatches\StandardLevelDetailViewRefreshContent.cs" />

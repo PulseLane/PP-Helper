@@ -99,7 +99,16 @@ namespace PP_Helper
 
         public void OnGameSceneActive()
         {
-            new GameObject("PP Counter").AddComponent<PPCounter>();
+            if (PluginManager.EnabledPlugins.Any(x => x.Id == "Counters+"))
+            {
+                Logger.log.Debug("Counters+ installed");
+                MainConfigModel model = ConfigLoader.LoadPPConfig();
+                if (model.ppConfig.Enabled)
+                {
+                    Logger.log.Debug("ppconfig enabled");
+                    new GameObject("PP Counter").AddComponent<PPCounter>();
+                }
+            }
         }
 
         [OnDisable]
@@ -122,7 +131,7 @@ namespace PP_Helper
         {
             CustomCounter counter = new CustomCounter
             {
-                SectionName = "PPHelperCounter",
+                SectionName = "PPHelper Counter",
                 Name = "PP",
                 BSIPAMod = PluginManager.EnabledPlugins.First(x => x.Name == Name),
                 Counter = "PP Counter",

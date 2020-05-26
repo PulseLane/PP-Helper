@@ -6,6 +6,7 @@ using System.Collections;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 using UnityEngine.UI;
 using static PP_Helper.Data.ProfileDataLoader;
 
@@ -42,11 +43,9 @@ namespace PP_Helper.Counters
             _counter.alignment = TextAlignmentOptions.Center;
             _counter.fontSize = 3f;
             _counter.color = Color.white;
-            _counter.lineSpacing = -50f;
             _counter.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 1f);
             _counter.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 1f);
             _counter.enableWordWrapping = false;
-            _counter.transform.localPosition = new Vector3(-0.1f, 2.5f, 8f);
 
             _totalNotes = 0;
             _score = 0;
@@ -75,6 +74,7 @@ namespace PP_Helper.Counters
 
                 yield return new WaitUntil(() => _scoreController != null);
                 _scoreController.scoreDidChangeEvent += OnScoreChange;
+                UpdateCounter();
             }
         }
 
@@ -100,6 +100,7 @@ namespace PP_Helper.Counters
         private void OnNoteCut(INoteController data, NoteCutInfo info)
         {
             if (data.noteData.noteType != NoteType.Bomb) _totalNotes++;
+            UpdateCounter();
         }
 
         private void UpdateCounter()
