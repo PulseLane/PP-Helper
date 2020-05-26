@@ -32,15 +32,8 @@ namespace PP_Helper.Utils
 
         public static double GetStars(SongID songID)
         {
-            var difficultyStats = SongDataCore.Plugin.Songs.Data.Songs[songID.id].diffs;
-            foreach (var difficultyStat in difficultyStats)
-            {
-                if (difficultyStat.diff.Equals(SongDataUtils.GetDifficultyAsString(songID.difficulty)))
-                {
-                    return difficultyStat.star;
-                }
-            }
-            throw new ArgumentException();
+            var difficultyStat = GetDifficultyStat(songID);
+            return difficultyStat.star;
         }
 
         public static double GetRoundedStars(SongID songID)
@@ -56,7 +49,31 @@ namespace PP_Helper.Utils
 
         public static bool IsRankedSong(SongID songID)
         {
-            return RawPPLoader.InDict(songID.id);
+            var difficultyStat = GetDifficultyStat(songID);
+            return difficultyStat.pp > 0;
+        }
+
+        public static float GetRawPP(SongID songID)
+        {
+            if (RawPPLoader.InDict(songID.id))
+            {
+                return RawPPLoader.GetRawPP(songID);
+            }
+            return 0;
+        }
+
+        private static SongDataCore.BeatStar.BeatStarSongDifficultyStats GetDifficultyStat(SongID songID)
+        {
+            var difficultyStats = SongDataCore.Plugin.Songs.Data.Songs[songID.id].diffs;
+            foreach (var difficultyStat in difficultyStats)
+            {
+                if (difficultyStat.diff.Equals(SongDataUtils.GetDifficultyAsString(songID.difficulty)))
+                {
+                    return difficultyStat;
+                }
+            }
+
+            throw new ArgumentException();
         }
     }
 }

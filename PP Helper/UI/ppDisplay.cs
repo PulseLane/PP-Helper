@@ -63,29 +63,26 @@ namespace PP_Helper.UI
 
         internal void Refresh(string id)
         {
-            if (RawPPLoader.InDict(id))
+            try
             {
-                // Will fail if difficulty is unknown - set to default '-' in that case
-                try
+                IDifficultyBeatmap difficultyBeatmap = _standardLevelDetailView.selectedDifficultyBeatmap;
+                _id = new ProfileDataLoader.SongID(id, difficultyBeatmap.difficulty);
+                if (SongDataUtils.IsRankedSong(_id))
                 {
                     _parentObject.SetActive(true);
-                    IDifficultyBeatmap difficultyBeatmap = _standardLevelDetailView.selectedDifficultyBeatmap;
-                    _id = new ProfileDataLoader.SongID(id, difficultyBeatmap.difficulty);
-                    _rawPP = RawPPLoader.GetRawPP(id, difficultyBeatmap);
+                    _rawPP = SongDataUtils.GetRawPP(_id);
                     LoadAcc();
                     SetPPText(PPUtils.CalculatePP(_rawPP, _accuracy));
                 }
-                catch (Exception)
+                else
                 {
-                    Logger.log.Debug($"error with difficulty for song {id}");
                     _parentObject.SetActive(false);
-                    _ppText.SetText("-");
                 }
             }
-            else
+            catch (Exception)
             {
+                Logger.log.Debug($"error with difficulty for song {id}");
                 _parentObject.SetActive(false);
-                _ppText.SetText("-");
             }
         }
 

@@ -1,5 +1,6 @@
 ﻿using PP_Helper.Data;
 using System;
+using static PP_Helper.Data.ProfileDataLoader;
 
 namespace PP_Helper.Utils
 {
@@ -53,6 +54,12 @@ namespace PP_Helper.Utils
         {
             var output = rawPP * PPPercentage(accuracy);
             return output;
+        }
+
+        public static float CalculatePP(SongID songID, float accuracy)
+        {
+            var rawPP = SongDataUtils.GetRawPP(songID);
+            return CalculatePP(rawPP, accuracy);
         }
 
         public static float GetPPGain(float pp, ProfileDataLoader.SongID id)

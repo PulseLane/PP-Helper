@@ -22,6 +22,7 @@ namespace PP_Helper.Counters
         private BeatmapObjectManager _beatmapObjectManager;
         private ScoreController _scoreController;
         private SongID _songID;
+        private float _rawPP;
 
         // Mostly just copying from Deviation Counter
         void Start()
@@ -64,6 +65,7 @@ namespace PP_Helper.Counters
 
             _difficultyBeatmap = BS_Utils.Plugin.LevelData.GameplayCoreSceneSetupData.difficultyBeatmap;
             _songID = new SongID(SongDataUtils.GetHash(_difficultyBeatmap.level.levelID), _difficultyBeatmap.difficulty);
+            _rawPP = SongDataUtils.GetRawPP(_songID);
 
             // Only update for ranked songs
             if (SongDataUtils.IsRankedSong(_songID))
@@ -112,8 +114,7 @@ namespace PP_Helper.Counters
             else
                 acc = (float) _score / (float) maxScore;
 
-            var rawPP = RawPPLoader.GetRawPP(_songID.id, _difficultyBeatmap);
-            var pp = PPUtils.CalculatePP(rawPP, acc * 100);
+            var pp = PPUtils.CalculatePP(_rawPP, acc * 100);
             _counter.text = $"{Math.Round(pp, 2)}pp";
         }
     }

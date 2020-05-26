@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using static PP_Helper.Data.ProfileDataLoader;
 
 namespace PP_Helper.Data
 {
@@ -53,31 +54,28 @@ namespace PP_Helper.Data
             return _songData.ContainsKey(hash);
         }
 
-        public static float GetRawPP(string hash, IDifficultyBeatmap difficultyBeatmap)
+        public static float GetRawPP(SongID songID)
         {
-            // Should never happen, but why not
             if (!init)
             {
                 Logger.log.Error("Tried to use RawPPLoader when it wasn't initialized!");
                 throw new Exception("Tried to use RawPPLoader when it wasn't initialized");
             }
 
-            BeatmapDifficulty difficulty = difficultyBeatmap.difficulty;
-            // Will need to check more than just difficulty if non-standard song is ever ranked
-            switch (difficulty)
+            switch (songID.difficulty)
             {
                 case BeatmapDifficulty.Easy:
-                    return _songData[hash]._Easy_SoloStandard;
+                    return _songData[songID.id]._Easy_SoloStandard;
                 case BeatmapDifficulty.Normal:
-                    return _songData[hash]._Normal_SoloStandard;
+                    return _songData[songID.id]._Normal_SoloStandard;
                 case BeatmapDifficulty.Hard:
-                    return _songData[hash]._Hard_SoloStandard;
+                    return _songData[songID.id]._Hard_SoloStandard;
                 case BeatmapDifficulty.Expert:
-                    return _songData[hash]._Expert_SoloStandard;
+                    return _songData[songID.id]._Expert_SoloStandard;
                 case BeatmapDifficulty.ExpertPlus:
-                    return _songData[hash]._ExpertPlus_SoloStandard;
+                    return _songData[songID.id]._ExpertPlus_SoloStandard;
                 default:
-                    Logger.log.Error("Unknown beatmap difficulty: " + difficulty.ToString());
+                    Logger.log.Error("Unknown beatmap difficulty: " + songID.difficulty.ToString());
                     throw new Exception("Unknown difficultry");
             }
         }
