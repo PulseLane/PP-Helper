@@ -62,7 +62,7 @@ namespace PP_Helper.Data
         private static float RoundedAcc(double acc)
         {
             // Round to nearest multiple of accIncrement
-            return (float) Math.Round(Math.Floor(acc * 100 / Config.accIncrement) * Config.accIncrement, 2);
+            return (float) Math.Round(Math.Round(acc * 100 / Config.accIncrement) * Config.accIncrement, 2);
         }
 
         internal void LoadStarAcc()
@@ -84,7 +84,7 @@ namespace PP_Helper.Data
 
         internal void SaveAcc(SongID id, float accuracy)
         {
-            _songSpecificAcc.Add(id, accuracy / 100);
+            _songSpecificAcc[id] = accuracy / 100f;
             WriteSongSpecificAccuracy();
         }
 
