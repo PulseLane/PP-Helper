@@ -11,6 +11,7 @@ namespace PP_Helper
         public static float starRange = 0.25f;
         public static CalculationType starAccChoice = CalculationType.AverageOfTopN;
         public static int numberOfScores = 3;
+        public static bool accOverride = true;
 
         public static void Read()
         {
@@ -19,6 +20,7 @@ namespace PP_Helper
             starRange = config.GetFloat("PP Helper", "starRange", 0.5f, true);
             starAccChoice = Enum.TryParse(config.GetString("PP Helper", "starAccChoice", "AverageOfTopN", true), out CalculationType choice) ? choice : CalculationType.AverageOfTopN;
             numberOfScores = config.GetInt("PP Helper", "numberOfScores", 3, true);
+            accOverride = config.GetBool("PP Helper", "accOverride", true, true);
         }
 
         public static void Write()
@@ -28,6 +30,7 @@ namespace PP_Helper
             config.SetFloat("PP Helper", "starRange", starRange);
             config.SetString("PP Helper", "starAccChoice", starAccChoice.ToString());
             config.SetInt("PP Helper", "numberOfScores", numberOfScores);
+            config.SetBool("PP Helper", "accOverride", accOverride);
         }
     }
 }

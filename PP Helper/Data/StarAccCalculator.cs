@@ -115,8 +115,27 @@ namespace PP_Helper.Data
                 }
             }
 
+            if (Config.accOverride)
+                CleanupStarAcc(ref acc);
+
             Logger.log.Debug("Finished calculating star acc");
             SaveFile(acc);
+        }
+
+        // Replace lower accs with the best higher acc
+        private static void CleanupStarAcc(ref Dictionary<double, double> starAcc)
+        {
+            // go through in reverse order
+            List<double> sortedValues = starAcc.Keys.OrderBy(key => -key).ToList();
+
+            double bestAcc = 0;
+            foreach (var key in sortedValues)
+            {
+                if (starAcc[key] > bestAcc)
+                    bestAcc = starAcc[key];
+                else
+                    starAcc[key] = bestAcc;
+            }
         }
 
         // Loops through all songs and finds the highest star difficulty saved (rounded up to nearest multiple of starRange)

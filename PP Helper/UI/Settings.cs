@@ -69,5 +69,16 @@ namespace PP_Helper.UI
                 Config.Write();
             }
         }
+
+        [UIValue("accOverride")]
+        public bool accOverride
+        {
+            get => Config.accOverride;
+            set
+            {
+                Config.accOverride = value;
+                Config.Write();
+            }
+        }
     }
 }
