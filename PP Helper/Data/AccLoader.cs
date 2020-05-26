@@ -46,7 +46,7 @@ namespace PP_Helper.Data
             }
 
             // Next check for star acc
-            var star = SongDataUtils.GetRoundedDownStars(songID);
+            var star = SongDataUtils.GetRoundedStars(songID);
             if (_starAcc.ContainsKey(star))
             {
                 bestAcc = Math.Max(bestAcc, _starAcc[star]);

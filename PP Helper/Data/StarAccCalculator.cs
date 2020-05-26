@@ -76,16 +76,16 @@ namespace PP_Helper.Data
             var averageAll = Config.starAccChoice.Equals(CalculationType.AverageOfAll);
 
             // Initialize dicts
-            for (double star = 0.00; star < maxStarValue; star += 0.25)
+            for (double star = 0.00; star <= maxStarValue + 2 * Config.starRange; star += Config.starRange)
             {
-                star = SongDataUtils.GetRoundedDownStars(star);
+                star = SongDataUtils.GetRoundedStars(star);
                 acc[star] = 0;
                 counts[star] = 0;
             }
 
             foreach (var kvp in ProfileDataLoader.instance.songDataInfo)
             {
-                var star = SongDataUtils.GetStars(kvp.Key);
+                var star = SongDataUtils.GetRoundedStars(kvp.Key);
                 // Will definitely be updating acc
                 if (averageAll || counts[star] < numberOfScores)
                 {
@@ -132,7 +132,7 @@ namespace PP_Helper.Data
                     {
                         if (difficultyStat.diff.Equals(SongDataUtils.GetDifficultyAsString(kvp.Key.difficulty)))
                         {
-                            var star = SongDataUtils.GetRoundedUpStars(difficultyStat.star);
+                            var star = SongDataUtils.GetRoundedStars(difficultyStat.star);
                             maxStarValue = star > maxStarValue ? star : maxStarValue;
                         }
                     }

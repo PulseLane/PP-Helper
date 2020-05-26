@@ -43,26 +43,15 @@ namespace PP_Helper.Utils
             throw new ArgumentException();
         }
 
-        public static double GetRoundedDownStars(SongID songID)
+        public static double GetRoundedStars(SongID songID)
         {
             var star = GetStars(songID);
-            return GetRoundedDownStars(star);
+            return GetRoundedStars(star);
         }
 
-        public static double GetRoundedDownStars(double star)
+        public static double GetRoundedStars(double star)
         {
-            return Math.Round(Math.Floor(star / Config.starRange) * Config.starRange, 2);
-        }
-
-        public static double GetRoundedUpStars(SongID songID)
-        {
-            var star = GetStars(songID);
-            return GetRoundedUpStars(star);
-        }
-
-        public static double GetRoundedUpStars(double star)
-        {
-            return Math.Round(Math.Ceiling(star / Config.starRange) * Config.starRange, 2);
+            return Math.Round(Math.Round(star / Config.starRange) * Config.starRange, 2);
         }
 
         public static bool IsRankedSong(SongID songID)
