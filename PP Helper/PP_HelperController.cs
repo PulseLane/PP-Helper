@@ -25,12 +25,12 @@ namespace PP_Helper
         {
             if (instance == null)
                 new GameObject("PP_HelperController").AddComponent<PP_HelperController>();
-            ppDisplay.instance.Setup();
+            PPDisplay.instance.Setup();
         }
 
         public void Refresh()
         {
-            ppDisplay.instance.Refresh(_id);
+            PPDisplay.instance.Refresh(_id);
         }
 
         public void setId(string id)

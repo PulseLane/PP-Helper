@@ -13,7 +13,7 @@ using UnityEngine.UI;
 
 namespace PP_Helper.UI
 {
-    public class ppDisplay : PersistentSingleton<ppDisplay>
+    public class PPDisplay : PersistentSingleton<PPDisplay>
     {
         [UIParams]
         private BSMLParserParams _parserParams;

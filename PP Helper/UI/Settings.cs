@@ -28,7 +28,7 @@ namespace PP_Helper.UI
             {
                 value = (float) Math.Round(value, 2);
                 Config.accIncrement = value;
-                ppDisplay.instance.accIncrement = value;
+                PPDisplay.instance.accIncrement = value;
                 Config.Write();
             }
         }
