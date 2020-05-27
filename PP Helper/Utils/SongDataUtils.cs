@@ -60,8 +60,7 @@ namespace PP_Helper.Utils
 
         public static bool IsRankedSong(SongID songID)
         {
-            var difficultyStat = GetDifficultyStat(songID);
-            return difficultyStat.pp > 0;
+            return RawPPLoader.InDict(songID.id);
         }
 
         public static float GetRawPP(SongID songID)
@@ -71,6 +70,13 @@ namespace PP_Helper.Utils
                 return RawPPLoader.GetRawPP(songID);
             }
             return 0;
+        }
+
+        public static SongID GetSongID(IDifficultyBeatmap difficultyBeatmap)
+        {
+            var id = GetHash(difficultyBeatmap.level.levelID);
+            var difficulty = difficultyBeatmap.difficulty;
+            return new SongID(id, difficulty);
         }
 
         private static SongDataCore.BeatStar.BeatStarSongDifficultyStats GetDifficultyStat(SongID songID)

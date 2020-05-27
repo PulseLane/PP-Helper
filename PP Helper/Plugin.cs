@@ -56,21 +56,7 @@ namespace PP_Helper
                 if (PluginManager.EnabledPlugins.Any(x => x.Id == "SongBrowser"))
                 {
                     Logger.log.Info("SongBrowser installed, using harmony patches");
-
-                    // CreateSortButtons
-                    var originalCreateSortButtons = typeof(SongBrowserUI).GetMethod("CreateSortButtons", (BindingFlags)(-1));
-                    HarmonyMethod harmonyCreateSortButtons = new HarmonyMethod(typeof(CreateSortButtonsPatch).GetMethod("Postfix", (BindingFlags)(-1)));
-                    harmony.Patch(originalCreateSortButtons, postfix: harmonyCreateSortButtons);
-
-                    // RefreshCurrentSelectionDisplay
-                    var originalRefreshCurrentSelectionDisplay = typeof(SongBrowserUI).GetMethod("RefreshCurrentSelectionDisplay", (BindingFlags)(-1));
-                    HarmonyMethod harmonyRefreshCurrentSelectionDisplay = new HarmonyMethod(typeof(RefreshCurrentSelectionDisplayPatch).GetMethod("Postfix", (BindingFlags)(-1)));
-                    harmony.Patch(originalRefreshCurrentSelectionDisplay, postfix: harmonyRefreshCurrentSelectionDisplay);
-
-                    // ProcessSongList
-                    var originalProcessSongList = typeof(SongBrowserModel).GetMethod("ProcessSongList", (BindingFlags)(-1));
-                    HarmonyMethod harmonyProcessSongList = new HarmonyMethod(typeof(ProcessSongListPatch).GetMethod("Prefix", (BindingFlags)(-1)));
-                    harmony.Patch(originalProcessSongList, prefix: harmonyProcessSongList);
+                    HarmonyPatchSongBrowser();
                 }
                 else
                     Logger.log.Debug("SongBrowser not installed");
@@ -97,6 +83,8 @@ namespace PP_Helper
             BS_Utils.Utilities.BSEvents.lateMenuSceneLoadedFresh += OnMenuSceneLoadedFresh;
             BS_Utils.Utilities.BSEvents.levelSelected += OnLevelSelected;
             BS_Utils.Utilities.BSEvents.gameSceneActive += OnGameSceneActive;
+            BS_Utils.Utilities.BSEvents.levelCleared += OnLevelCleared;
+
             BSMLSettings.instance.AddSettingsMenu("PP Helper", "PP_Helper.UI.settings.bsml", Settings.instance);
 
             PP_HelperMenuUI.CreateUI();
@@ -139,6 +127,10 @@ namespace PP_Helper
                 }
             }
         }
+        public void OnLevelCleared(StandardLevelScenesTransitionSetupDataSO standardLevelScenesTransitionSetupDataSO, LevelCompletionResults levelCompletionResults)
+        {
+            ProfileDataLoader.instance.LevelCleared(standardLevelScenesTransitionSetupDataSO, levelCompletionResults);
+        }
 
         [OnDisable]
         public void OnDisable()
@@ -167,6 +159,24 @@ namespace PP_Helper
                 Description = "Shows how much pp your current accuracy is worth on a ranked map"
             };
             CustomCounterCreator.Create(counter);
+        }
+
+        private void HarmonyPatchSongBrowser()
+        {
+            // CreateSortButtons
+            var originalCreateSortButtons = typeof(SongBrowserUI).GetMethod("CreateSortButtons", (BindingFlags)(-1));
+            HarmonyMethod harmonyCreateSortButtons = new HarmonyMethod(typeof(CreateSortButtonsPatch).GetMethod("Postfix", (BindingFlags)(-1)));
+            harmony.Patch(originalCreateSortButtons, postfix: harmonyCreateSortButtons);
+
+            // RefreshCurrentSelectionDisplay
+            var originalRefreshCurrentSelectionDisplay = typeof(SongBrowserUI).GetMethod("RefreshCurrentSelectionDisplay", (BindingFlags)(-1));
+            HarmonyMethod harmonyRefreshCurrentSelectionDisplay = new HarmonyMethod(typeof(RefreshCurrentSelectionDisplayPatch).GetMethod("Postfix", (BindingFlags)(-1)));
+            harmony.Patch(originalRefreshCurrentSelectionDisplay, postfix: harmonyRefreshCurrentSelectionDisplay);
+
+            // ProcessSongList
+            var originalProcessSongList = typeof(SongBrowserModel).GetMethod("ProcessSongList", (BindingFlags)(-1));
+            HarmonyMethod harmonyProcessSongList = new HarmonyMethod(typeof(ProcessSongListPatch).GetMethod("Prefix", (BindingFlags)(-1)));
+            harmony.Patch(originalProcessSongList, prefix: harmonyProcessSongList);
         }
 
     }

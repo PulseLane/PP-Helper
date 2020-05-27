@@ -15,7 +15,7 @@ namespace PP_Helper
         private const string URI_PREFIX = "https://new.scoresaber.com/api/player/";
         private const int MAX_PAGE = 50;
         private const double EPSILON = 0.001; // pp gets rounded to 2 decimal places anyway
-        private const int WAIT_TIME_SECONDS = 1;
+        private const float WAIT_TIME_SECONDS = 0.5f;
         private List<SongPage> pages;
         public Action<int> OnPageFinished;
         public Action<List<SongPage>> OnProfileDataFinished;
