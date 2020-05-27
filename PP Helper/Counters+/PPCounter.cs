@@ -1,18 +1,16 @@
 ﻿using BeatSaberMarkupLanguage;
-using PP_Helper.Data;
 using PP_Helper.Utils;
 using System;
 using System.Collections;
 using System.Linq;
 using TMPro;
 using UnityEngine;
-using UnityEngine.PlayerLoop;
 using UnityEngine.UI;
 using static PP_Helper.Data.ProfileDataLoader;
 
 namespace PP_Helper.Counters
 {
-	public class PPCounter : MonoBehaviour
+    public class PPCounter : MonoBehaviour
     {
         private TextMeshProUGUI _counter;
         private int _totalNotes;

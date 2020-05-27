@@ -95,7 +95,7 @@ namespace PP_Helper.UI
         [UIAction("changedAcc")]
         private void ChangedAcc(float value)
         {
-            value = (float) Math.Round(value, 2);
+            value = (float)Math.Round(value, 2);
             _accuracy = value;
             SetPPText(PPUtils.CalculatePP(_rawPP, value));
         }

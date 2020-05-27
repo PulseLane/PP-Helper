@@ -72,11 +72,9 @@ namespace PP_Helper.Utils
             var ppTotal = ProfileDataLoader.instance.ppTopBottomSum[0];
             int oldIndex = -1;
 
-            Logger.log.Debug($"old total: {ppTotal}");
             // See if song has already been played
             if (ProfileDataLoader.instance.songIndex.ContainsKey(id))
             {
-                Logger.log.Debug("Song has been played before");
                 // Not a higher play, worth nothing
                 if (pp <= ProfileDataLoader.instance.songDataInfo[id].pp)
                 {
@@ -161,7 +159,6 @@ namespace PP_Helper.Utils
                     smallerPlays = FALLOFF_RATE * midValues + oldValues;
                 }
             }
-            Logger.log.Debug($"Smaller play: {smallerPlays}");
 
             double largerPlays;
             // First song - nothing is worth more
@@ -172,11 +169,7 @@ namespace PP_Helper.Utils
             else
                 largerPlays = ProfileDataLoader.instance.ppBottomUpSum[index - 1];
 
-            Logger.log.Debug($"Larger play: {largerPlays}");
-
-            Logger.log.Debug($"index: {index}");
             double newSum = (Math.Pow(FALLOFF_RATE, index) * pp) + smallerPlays + largerPlays;
-            Logger.log.Debug($"newSum: {newSum}");
             return newSum;
         }
     }
