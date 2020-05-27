@@ -138,7 +138,7 @@ namespace PP_Helper.Data
             }
         }
 
-        // Loops through all songs and finds the highest star difficulty saved (rounded up to nearest multiple of starRange)
+        // Loops through all songs and finds the highest star difficulty saved (rounded to nearest multiple of starRange)
         private static double CalculateMaxStarValue()
         {
             double maxStarValue = 0;

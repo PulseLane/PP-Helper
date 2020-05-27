@@ -21,6 +21,17 @@ namespace PP_Helper.Utils
             return _difficultyDict[difficulty];
         }
 
+        public static BeatmapDifficulty GetBeatmapDifficulty(string difficulty)
+        {
+            foreach (var kvp in _difficultyDict)
+            {
+                if (kvp.Value.Equals(difficulty))
+                    return kvp.Key;
+            }
+
+            throw new ArgumentException();
+        }
+
         public static string GetHash(string levelId)
         {
             if (levelId.Contains("custom_level"))

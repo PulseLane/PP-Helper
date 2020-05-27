@@ -1,18 +1,22 @@
 ﻿using BeatSaberMarkupLanguage.Settings;
+using CountersPlus.Custom;
 using HarmonyLib;
 using IPA;
 using IPA.Loader;
+using PP_Helper.Counters;
 using PP_Helper.Data;
+using PP_Helper.HarmonyPatches;
 using PP_Helper.UI;
 using PP_Helper.Utils;
+using SongBrowser;
+using SongBrowser.UI;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using UnityEngine;
 using IPALogger = IPA.Logging.Logger;
-using CountersPlus.Custom;
-using PP_Helper.Counters;
 
 namespace PP_Helper
 {
@@ -44,7 +48,32 @@ namespace PP_Helper
             harmony = new Harmony("com.PulseLane.BeatSaber.PP_Helper");
             try
             {
-                harmony.PatchAll(System.Reflection.Assembly.GetExecutingAssembly());
+                var originalRefreshContent = typeof(StandardLevelDetailView).GetMethod("RefreshContent");
+                HarmonyMethod harmonyRefreshContent = new HarmonyMethod(typeof(StandardLevelDetailViewRefreshContent).GetMethod("Postfix", (BindingFlags)(-1)));
+                harmony.Patch(originalRefreshContent, postfix: harmonyRefreshContent);
+
+                // SongBrowser integration
+                if (PluginManager.EnabledPlugins.Any(x => x.Id == "SongBrowser"))
+                {
+                    Logger.log.Info("SongBrowser installed, using harmony patches");
+
+                    // CreateSortButtons
+                    var originalCreateSortButtons = typeof(SongBrowserUI).GetMethod("CreateSortButtons", (BindingFlags)(-1));
+                    HarmonyMethod harmonyCreateSortButtons = new HarmonyMethod(typeof(CreateSortButtonsPatch).GetMethod("Postfix", (BindingFlags)(-1)));
+                    harmony.Patch(originalCreateSortButtons, postfix: harmonyCreateSortButtons);
+
+                    // RefreshCurrentSelectionDisplay
+                    var originalRefreshCurrentSelectionDisplay = typeof(SongBrowserUI).GetMethod("RefreshCurrentSelectionDisplay", (BindingFlags)(-1));
+                    HarmonyMethod harmonyRefreshCurrentSelectionDisplay = new HarmonyMethod(typeof(RefreshCurrentSelectionDisplayPatch).GetMethod("Postfix", (BindingFlags)(-1)));
+                    harmony.Patch(originalRefreshCurrentSelectionDisplay, postfix: harmonyRefreshCurrentSelectionDisplay);
+
+                    // ProcessSongList
+                    var originalProcessSongList = typeof(SongBrowserModel).GetMethod("ProcessSongList", (BindingFlags)(-1));
+                    HarmonyMethod harmonyProcessSongList = new HarmonyMethod(typeof(ProcessSongListPatch).GetMethod("Prefix", (BindingFlags)(-1)));
+                    harmony.Patch(originalProcessSongList, prefix: harmonyProcessSongList);
+                }
+                else
+                    Logger.log.Debug("SongBrowser not installed");
             }
             catch (Exception e)
             {

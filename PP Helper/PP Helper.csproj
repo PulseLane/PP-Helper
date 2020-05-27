@@ -68,6 +68,9 @@
     <Reference Include="Polyglot">
       <HintPath>F:\Steam\steamapps\common\Beat Saber\Beat Saber_Data\Managed\Polyglot.dll</HintPath>
     </Reference>
+    <Reference Include="SongBrowser">
+      <HintPath>F:\Steam\steamapps\common\Beat Saber\Plugins\SongBrowser.dll</HintPath>
+    </Reference>
     <Reference Include="SongDataCore, Version=1.3.3.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>F:\Steam\steamapps\common\Beat Saber\Plugins\SongDataCore.dll</HintPath>
@@ -112,6 +115,9 @@
     <Compile Include="Counters+\ConfigLoader.cs" />
     <Compile Include="Counters+\PPCounter.cs" />
     <Compile Include="Data\AccLoader.cs" />
+    <Compile Include="HarmonyPatches\CreateSortButtonsPatch.cs" />
+    <Compile Include="HarmonyPatches\ProcessSongListPatch.cs" />
+    <Compile Include="HarmonyPatches\RefreshCurrentSelectionDisplayPatch.cs" />
     <Compile Include="HarmonyPatches\StandardLevelDetailViewRefreshContent.cs" />
     <Compile Include="Data\ProfileDataLoader.cs" />
     <Compile Include="Data\RawPPLoader.cs" />
@@ -121,6 +127,7 @@
     <Compile Include="PP_HelperController.cs" />
     <Compile Include="Data\ProfileDownloader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SongBrowser\SongSorting.cs" />
     <Compile Include="UI\PPDisplay.cs" />
     <Compile Include="UI\PP_HelperMenuUI.cs" />
     <Compile Include="UI\Settings.cs" />
