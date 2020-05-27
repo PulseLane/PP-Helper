@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using UnityEngine;
 using static PP_Helper.Data.ProfileDataLoader;
 
 namespace PP_Helper.Data
@@ -27,12 +28,14 @@ namespace PP_Helper.Data
         public static void Initialize()
         {
             Logger.log.Debug("Starting raw pp data initialization");
-            // Use a file for now - offload to something else, likely s3, later
-            using (StreamReader file = File.OpenText(RAW_PP_FILE))
-            {
-                JsonSerializer serializer = new JsonSerializer();
-                _songData = (Dictionary<string, RawPPData>)serializer.Deserialize(file, typeof(Dictionary<string, RawPPData>));
-            }
+            var ppDownloader = new GameObject("RawPPDownloader").AddComponent<RawPPDownloader>();
+            ppDownloader.OnDataDownloaded += OnDataDownloaded;
+            ppDownloader.StartDownloading();
+        }
+
+        private static void OnDataDownloaded(Dictionary<string, RawPPData> songData)
+        {
+            _songData = songData;
             Logger.log.Debug("Loaded raw pp data");
             init = true;
         }

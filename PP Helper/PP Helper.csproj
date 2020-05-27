@@ -115,6 +115,7 @@
     <Compile Include="Counters+\ConfigLoader.cs" />
     <Compile Include="Counters+\PPCounter.cs" />
     <Compile Include="Data\AccLoader.cs" />
+    <Compile Include="Data\RawPPDownloader.cs" />
     <Compile Include="HarmonyPatches\CreateSortButtonsPatch.cs" />
     <Compile Include="HarmonyPatches\ProcessSongListPatch.cs" />
     <Compile Include="HarmonyPatches\RefreshCurrentSelectionDisplayPatch.cs" />
