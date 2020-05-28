@@ -34,9 +34,10 @@ namespace PP_Helper.Utils
 
         public static string GetHash(string levelId)
         {
-            if (levelId.Contains("custom_level"))
+            if (levelId.Contains("custom_level_"))
             {
-                return levelId.Substring(levelId.LastIndexOf("_") + 1);
+                var splits = levelId.Split('_');
+                return splits[2];
             }
             return levelId;
         }
