@@ -60,7 +60,11 @@ namespace PP_Helper.Utils
 
         public static bool IsRankedSong(SongID songID)
         {
-            return RawPPLoader.InDict(songID.id);
+            if(RawPPLoader.InDict(songID.id))
+            {
+                return RawPPLoader.GetRawPP(songID) > 0;
+            }
+            return false;
         }
 
         public static float GetRawPP(SongID songID)
