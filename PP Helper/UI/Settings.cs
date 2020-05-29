@@ -20,6 +20,17 @@ namespace PP_Helper.UI
             }
         }
 
+        [UIValue("ppTop")]
+        public bool ppTop
+        {
+            get => Config.ppTop;
+            set
+            {
+                Config.ppTop = value;
+                Config.Write();
+            }
+        }
+
         [UIValue("accIncrement")]
         public float accIncrement
         {

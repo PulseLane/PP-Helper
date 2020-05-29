@@ -1,6 +1,8 @@
 ﻿<horizontal horizontal-fit="PreferredSize" spacing="2"  pad="0">
   <text id='pp' text='' align="Center" rich-text="true" font-size="3.5"></text>
   <increment-setting align="Center" id="accuracy"  font-size="0" text="" increment="~accIncrement" min="0" max="100" preferred-width="30" pad="0" value="accuracyValue" formatter="accFormat"  apply-on-change="true" get-event="setAcc" on-change="changedAcc"></increment-setting>
-  <button-with-icon icon="PP_Helper.Assets.save.png" hover-hint="Save song-specific accuracy override" on-click="saveButtonPressed" stroke-type="Clean" align="Center" id="save" preferred-width="7"  pad="0" preferred-height="1" text="" font-size="0"></button-with-icon>
-  <button-with-icon icon="PP_Helper.Assets.load.png" hover-hint="Erase song-specific acc and load from star calculation" on-click="loadButtonPressed" stroke-type="Clean" align="Center" id="load" preferred-width="7" pad="0" preferred-height="1" text="" font-size="0"></button-with-icon>
+  <horizontal horizontal-fit="PreferredSize" spacing="1" pad="0">
+    <button-with-icon icon="PP_Helper.Assets.save.png" hover-hint="Save song-specific accuracy override" on-click="saveButtonPressed" stroke-type="Clean" align="Center" id="save" preferred-width="5"  pad="0" preferred-height="5" text="" font-size="0"></button-with-icon>
+    <button-with-icon icon="PP_Helper.Assets.load.png" hover-hint="Erase song-specific acc and load from star calculation" on-click="loadButtonPressed" stroke-type="Clean" align="Center" id="load" preferred-width="5" pad="0" preferred-height="5" text="" font-size="0"></button-with-icon>
+  </horizontal>
 </horizontal>

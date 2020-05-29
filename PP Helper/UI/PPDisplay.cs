@@ -27,6 +27,11 @@ namespace PP_Helper.UI
         [UIValue("accIncrement")]
         public float accIncrement = Config.accIncrement;
 
+        [UIObject("save")]
+        private GameObject _saveObject;
+        [UIObject("load")]
+        private GameObject _loadObject;
+
         private StandardLevelDetailView _standardLevelDetailView;
         private static GameObject _parentObject;
         private float _rawPP = 0f;
@@ -53,10 +58,14 @@ namespace PP_Helper.UI
             var accTransform = (RectTransform)_accText.transform.parent.transform.parent.transform;
             accTransform.sizeDelta = new Vector2(30f, 1f);
 
-            // We want pp stuff above play stuff
-            var playButton = _standardLevelDetailView.GetPrivateField<Button>("_playButton");
-            var playContainer = playButton.transform.parent.transform.parent;
-            playContainer.transform.SetAsLastSibling();
+            // We want pp stuff above play button
+            if (Config.ppTop)
+            {
+                var playButton = _standardLevelDetailView.GetPrivateField<Button>("_playButton");
+                var playContainer = playButton.transform.parent.transform.parent;
+                playContainer.transform.SetAsLastSibling();
+            }
+
 
             Logger.log.Debug("Done setup");
         }
