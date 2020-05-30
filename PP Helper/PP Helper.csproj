@@ -114,6 +114,7 @@
     <Compile Include="Config.cs" />
     <Compile Include="Counters+\ConfigLoader.cs" />
     <Compile Include="Counters+\PPCounter.cs" />
+    <Compile Include="Counters+\PPSettingsHandler.cs" />
     <Compile Include="Data\AccLoader.cs" />
     <Compile Include="Data\RawPPDownloader.cs" />
     <Compile Include="HarmonyPatches\CreateSortButtonsPatch.cs" />
@@ -148,6 +149,7 @@
     <None Include=".gitignore" />
     <EmbeddedResource Include="UI\ppDisplay.bsml" />
     <EmbeddedResource Include="UI\settings.bsml" />
+    <EmbeddedResource Include="Counters+\settings.bsml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Assets\load.png" />

@@ -22,6 +22,8 @@ namespace PP_Helper.Counters
         private SongID _songID;
         private float _rawPP;
 
+        private double _multiplier;
+
         // Mostly just copying from Deviation Counter
         void Start()
         {
@@ -48,6 +50,7 @@ namespace PP_Helper.Counters
 
             _totalNotes = 0;
             _score = 0;
+            _multiplier = 0;
         }
 
         IEnumerator FindBeatMapObjectManager()
@@ -65,6 +68,12 @@ namespace PP_Helper.Counters
             _songID = new SongID(SongDataUtils.GetHash(_difficultyBeatmap.level.levelID), _difficultyBeatmap.difficulty);
             _rawPP = SongDataUtils.GetRawPP(_songID);
 
+            // modifiers
+            var gameplayModifiersModelSO = Resources.FindObjectsOfTypeAll<GameplayModifiersModelSO>().FirstOrDefault();
+            var gameplayModifiers = BS_Utils.Plugin.LevelData.GameplayCoreSceneSetupData.gameplayModifiers;
+            _multiplier = gameplayModifiersModelSO.GetTotalMultiplier(gameplayModifiers);
+            _multiplier = (Config.ignoreNoFail && gameplayModifiers.noFail) ? _multiplier + 0.5 : _multiplier;
+
             // Only update for ranked songs
             if (SongDataUtils.IsRankedSong(_songID))
             {
@@ -74,7 +83,8 @@ namespace PP_Helper.Counters
 
                 yield return new WaitUntil(() => _scoreController != null);
                 _scoreController.scoreDidChangeEvent += OnScoreChange;
-                UpdateCounter();
+                if (!Config.hideOnStart)
+                    UpdateCounter();
             }
         }
 
@@ -87,7 +97,7 @@ namespace PP_Helper.Counters
 
         private void OnScoreChange(int scoreBeforeMultiplier, int scoreAfterMultiplier)
         {
-            _score = scoreAfterMultiplier;
+            _score = (int) (scoreBeforeMultiplier * _multiplier);
             UpdateCounter();
         }
 
@@ -113,7 +123,7 @@ namespace PP_Helper.Counters
                 acc = (float) _score / (float) maxScore;
 
             var pp = PPUtils.CalculatePP(_rawPP, acc * 100);
-            _counter.text = $"{Math.Round(pp, 2)}pp";
+            _counter.text = $"{Math.Round(pp, Config.decimalPrecision)}pp";
         }
     }
 }

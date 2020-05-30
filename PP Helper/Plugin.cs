@@ -120,7 +120,6 @@ namespace PP_Helper
                 MainConfigModel model = ConfigLoader.LoadPPConfig();
                 if (model.ppConfig.Enabled)
                 {
-                    Logger.log.Debug("ppconfig enabled");
                     new GameObject("PP Counter").AddComponent<PPCounter>();
                 }
             }
@@ -155,7 +154,9 @@ namespace PP_Helper
                 BSIPAMod = PluginManager.EnabledPlugins.First(x => x.Name == Name),
                 Counter = "PP Counter",
                 Description = "Shows how much pp your current accuracy is worth on a ranked map",
-                Icon_ResourceName = "PP_Helper.Assets.pp.png"
+                Icon_ResourceName = "PP_Helper.Assets.pp.png",
+                CustomSettingsResource = "PP_Helper.Counters_.settings.bsml",
+                CustomSettingsHandler = typeof(PPSettingsHandler)
             };
             CustomCounterCreator.Create(counter);
         }
