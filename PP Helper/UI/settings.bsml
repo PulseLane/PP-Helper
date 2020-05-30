@@ -1,9 +1,10 @@
-﻿<settings-container>
+﻿<scrollable-settings-container>
+  <checkbox-setting text="Song View Info" value="showInfo" hover-hint="Show PP information on the song view panel"></checkbox-setting>
   <slider-setting text="Default Accuracy" value="defaultAcc" hover-hint="The default accuracy to use when there is no average acc or song-specific value" min="0" max="100" increment="0.1"></slider-setting>
-  <checkbox-setting text="Higher PP Info" hover-hint="Move PP information above play info" value="ppTop"></checkbox-setting>
+  <checkbox-setting text="Higher Song View Info" hover-hint="Move PP information above play info" value="ppTop"></checkbox-setting>
   <increment-setting text="Accuracy Increment Value" value="accIncrement" hover-hint="How much to increase/decrease the accuracy by when incrementing the accuracy on the song view" min="0.05" max="10" increment="0.05"></increment-setting>
   <increment-setting text="Star Acc. Range" value="starRange" hover-hint="How wide the star range should be when calculating your accuracy" min="0.1" max="2" increment="0.05"></increment-setting>
   <dropdown-list-setting text="Star Acc. Calculation" hover-hint="How to calculate the star accuracy" value="starAccChoice" choices="starAccOptions"></dropdown-list-setting>
   <increment-setting text="Number of Scores" value="numberOfScores" hover-hint="How many scores to use if using the 'Top N Scores' calculation option" min="1" max="25" increment="1" integer-only="true" ></increment-setting>
   <checkbox-setting text="Better Acc. Override" hover-hint="When calculating star acc, use the better of current and higher star accuracies" value="accOverride"></checkbox-setting>
-</settings-container>
+</scrollable-settings-container>

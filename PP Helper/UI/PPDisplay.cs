@@ -74,6 +74,12 @@ namespace PP_Helper.UI
 
         internal void Refresh(string id)
         {
+            if (!Config.showInfo)
+            {
+                _parentObject.SetActive(false);
+                return;
+            }
+
             try
             {
                 IDifficultyBeatmap difficultyBeatmap = _standardLevelDetailView.selectedDifficultyBeatmap;

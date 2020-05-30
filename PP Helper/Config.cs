@@ -6,6 +6,7 @@ namespace PP_Helper
     class Config
     {
         public static BS_Utils.Utilities.Config config = new BS_Utils.Utilities.Config("PP Helper");
+        public static bool showInfo = true;
         public static float defaultAcc = 80.0f;
         public static bool ppTop = false;
         public static float accIncrement = 0.1f;
@@ -16,6 +17,7 @@ namespace PP_Helper
 
         public static void Read()
         {
+            showInfo = config.GetBool("PP Helper", "showInfo", true, true);
             defaultAcc = config.GetFloat("PP Helper", "defaultAcc", 80f, true);
             ppTop = config.GetBool("PP Helper", "ppTop", false, true);
             accIncrement = config.GetFloat("PP Helper", "accIncrement", 0.1f, true);
@@ -27,6 +29,7 @@ namespace PP_Helper
 
         public static void Write()
         {
+            config.SetBool("PP Helper", "showInfo", showInfo);
             config.SetFloat("PP Helper", "defaultAcc", defaultAcc);
             config.SetBool("PP Helper", "ppTop", ppTop);
             config.SetFloat("PP Helper", "accIncrement", accIncrement);

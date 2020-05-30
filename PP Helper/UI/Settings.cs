@@ -9,6 +9,16 @@ namespace PP_Helper.UI
 {
     class Settings : PersistentSingleton<Settings>
     {
+        [UIValue("showInfo")]
+        public bool showInfo
+        {
+            get => Config.showInfo;
+            set
+            {
+                Config.showInfo = value;
+                Config.Write();
+            }
+        }
         [UIValue("defaultAcc")]
         public float defaultAcc
         {
