@@ -154,7 +154,8 @@ namespace PP_Helper
                 Name = "PP",
                 BSIPAMod = PluginManager.EnabledPlugins.First(x => x.Name == Name),
                 Counter = "PP Counter",
-                Description = "Shows how much pp your current accuracy is worth on a ranked map"
+                Description = "Shows how much pp your current accuracy is worth on a ranked map",
+                Icon_ResourceName = "PP_Helper.Assets.pp.png"
             };
             CustomCounterCreator.Create(counter);
         }
