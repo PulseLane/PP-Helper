@@ -87,7 +87,7 @@ namespace PP_Helper.Counters
 
         private void OnScoreChange(int scoreBeforeMultiplier, int scoreAfterMultiplier)
         {
-            _score = scoreBeforeMultiplier;
+            _score = scoreAfterMultiplier;
             UpdateCounter();
         }
 

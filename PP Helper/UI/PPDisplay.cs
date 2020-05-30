@@ -5,9 +5,11 @@ using BS_Utils.Utilities;
 using PP_Helper.Data;
 using PP_Helper.Utils;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using TMPro;
+using Unity.Jobs;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -22,6 +24,7 @@ namespace PP_Helper.UI
         private TextMeshProUGUI _ppText;
         [UIObject("accuracy")]
         private GameObject _accuracyObject;
+        // Accuracy is out of 100 here
         [UIValue("accuracyValue")]
         private float _accuracy = 85f;
         [UIValue("accIncrement")]
@@ -66,7 +69,6 @@ namespace PP_Helper.UI
                 playContainer.transform.SetAsLastSibling();
             }
 
-
             Logger.log.Debug("Done setup");
         }
 
@@ -76,12 +78,23 @@ namespace PP_Helper.UI
             {
                 IDifficultyBeatmap difficultyBeatmap = _standardLevelDetailView.selectedDifficultyBeatmap;
                 _id = new ProfileDataLoader.SongID(id, difficultyBeatmap.difficulty);
+
+                var gameplayModifiersPanelController = Resources.FindObjectsOfTypeAll<GameplayModifiersPanelController>().FirstOrDefault();
+                var modifiersModel = Resources.FindObjectsOfTypeAll<GameplayModifiersModelSO>().First();
+                var modifiers = gameplayModifiersPanelController.GetPrivateField<GameplayModifiers>("_gameplayModifiers");
                 if (SongDataUtils.IsRankedSong(_id))
                 {
                     _parentObject.SetActive(true);
                     _rawPP = SongDataUtils.GetRawPP(_id);
                     LoadAcc();
-                    SetPPText(PPUtils.CalculatePP(_rawPP, _accuracy));
+                    if (PPUtils.AllowedModifiers(_id.id, modifiers))
+                    {
+                        SetPPText(PPUtils.CalculatePP(_rawPP, BeatSaberUtils.GetModifiedAcc(_accuracy, modifiersModel, modifiers)));
+                    }
+                    else
+                    {
+                        SetPPText(0);
+                    }
                 }
                 else
                 {

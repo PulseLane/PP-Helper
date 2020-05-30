@@ -1,4 +1,7 @@
-﻿using PP_Helper.UI;
+﻿using BS_Utils.Utilities;
+using JetBrains.Annotations;
+using PP_Helper.UI;
+using System.Linq;
 using UnityEngine;
 
 namespace PP_Helper
@@ -36,6 +39,11 @@ namespace PP_Helper
         public void setId(string id)
         {
             _id = id;
+        }
+
+        public void UpdateModifiers()
+        {
+            PPDisplay.instance.Refresh(_id);
         }
 
         private void OnDestroy()

@@ -117,6 +117,7 @@
     <Compile Include="Data\AccLoader.cs" />
     <Compile Include="Data\RawPPDownloader.cs" />
     <Compile Include="HarmonyPatches\CreateSortButtonsPatch.cs" />
+    <Compile Include="HarmonyPatches\RefreshTotalMultiplierAndRankUIPatch.cs" />
     <Compile Include="HarmonyPatches\ProcessSongListPatch.cs" />
     <Compile Include="HarmonyPatches\RefreshCurrentSelectionDisplayPatch.cs" />
     <Compile Include="HarmonyPatches\StandardLevelDetailViewRefreshContent.cs" />
@@ -132,6 +133,7 @@
     <Compile Include="UI\PPDisplay.cs" />
     <Compile Include="UI\PP_HelperMenuUI.cs" />
     <Compile Include="UI\Settings.cs" />
+    <Compile Include="Utils\BeatSaberUtils.cs" />
     <Compile Include="Utils\PPUtils.cs" />
     <Compile Include="Utils\ScoreSaberUtils.cs" />
     <Compile Include="Utils\SongDataUtils.cs" />

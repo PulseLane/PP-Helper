@@ -48,9 +48,7 @@ namespace PP_Helper
             harmony = new Harmony("com.PulseLane.BeatSaber.PP_Helper");
             try
             {
-                var originalRefreshContent = typeof(StandardLevelDetailView).GetMethod("RefreshContent");
-                HarmonyMethod harmonyRefreshContent = new HarmonyMethod(typeof(StandardLevelDetailViewRefreshContent).GetMethod("Postfix", (BindingFlags)(-1)));
-                harmony.Patch(originalRefreshContent, postfix: harmonyRefreshContent);
+                HarmonyPatchBase();
 
                 // SongBrowser integration
                 if (PluginManager.EnabledPlugins.Any(x => x.Id == "SongBrowser"))
@@ -159,6 +157,19 @@ namespace PP_Helper
                 Description = "Shows how much pp your current accuracy is worth on a ranked map"
             };
             CustomCounterCreator.Create(counter);
+        }
+
+        private void HarmonyPatchBase()
+        {
+            // RefreshContent
+            var originalRefreshContent = typeof(StandardLevelDetailView).GetMethod("RefreshContent");
+            HarmonyMethod harmonyRefreshContent = new HarmonyMethod(typeof(StandardLevelDetailViewRefreshContent).GetMethod("Postfix", (BindingFlags)(-1)));
+            harmony.Patch(originalRefreshContent, postfix: harmonyRefreshContent);
+
+            // RefreshTotalMultiplierAndRankUI
+            var originalRefreshTotalMultiplierAndRankUI = typeof(GameplayModifiersPanelController).GetMethod("RefreshTotalMultiplierAndRankUI");
+            HarmonyMethod harmonyRefreshTotalMultiplierAndRankUI = new HarmonyMethod(typeof(RefreshTotalMultiplierAndRankUIPatch).GetMethod("Postfix", (BindingFlags)(-1)));
+            harmony.Patch(originalRefreshTotalMultiplierAndRankUI, postfix: harmonyRefreshTotalMultiplierAndRankUI);
         }
 
         private void HarmonyPatchSongBrowser()

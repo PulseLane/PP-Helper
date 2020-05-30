@@ -1,5 +1,6 @@
 ﻿using PP_Helper.Data;
 using System;
+using System.Collections.Generic;
 using static PP_Helper.Data.ProfileDataLoader;
 
 namespace PP_Helper.Utils
@@ -25,6 +26,10 @@ namespace PP_Helper.Utils
             (100f, 1.12f),
             (110f, 1.18f),
             (114f, 1.25f)
+        };
+        private static HashSet<string> songsAllowingModifiers = new HashSet<string> {
+            "2FDDB136BDA7F9E29B4CB6621D6D8E0F8A43B126", // Overkill Nuketime
+            "27FCBAB3FB731B16EABA14A5D039EEFFD7BD44C9" // Overkill Kry
         };
 
         // Pre-compute to save on division operator
@@ -98,6 +103,11 @@ namespace PP_Helper.Utils
 
             // Not worth more than any song already played
             return (float)(Math.Pow(FALLOFF_RATE, ProfileDataLoader.instance.songOrder.Count) * pp);
+        }
+
+        public static bool AllowedModifiers(string id, GameplayModifiers modifiers)
+        {
+            return songsAllowingModifiers.Contains(id) || !BeatSaberUtils.HasPositiveModifiers(modifiers);
         }
 
         // calculate how much percentage of the raw pp a given percentage is worth

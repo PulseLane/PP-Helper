@@ -144,6 +144,7 @@ namespace PP_Helper.SongBrowser
                 .ToList();
         }
 
+        // Purposefully ignore modifiers here - only 2 maps have them enabled and it doesn't make much sense to just filter to those two
         private static float GetHighestPP(IPreviewBeatmapLevel previewBeatmapLevel, bool ppGain)
         {
             float maxPP = 0;

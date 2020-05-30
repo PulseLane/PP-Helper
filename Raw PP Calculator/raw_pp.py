@@ -11,8 +11,8 @@ STATUS_UPDATES = True
 PAGE_LIMIT = 1000
 FILE_NAME = "raw_pp.json"
 # time in seconds
-WAIT_BETWEEN_LEADERBOARD_CALLS = 10
-WAIT_BETWEEN_API_CALLS = 10
+WAIT_BETWEEN_LEADERBOARD_CALLS = 2
+WAIT_BETWEEN_API_CALLS = 5
 BACKOFF_TIME = 60 * 10
 
 raw_pp_data = {}
@@ -36,6 +36,11 @@ pp_curve = [
     (110, 1.18),
     (114, 1.25),
 ]
+
+song_override = {
+    "2FDDB136BDA7F9E29B4CB6621D6D8E0F8A43B126": {"_ExpertPlus_SoloStandard": 303.61},
+    "27FCBAB3FB731B16EABA14A5D039EEFFD7BD44C9": {"_ExpertPlus_SoloStandard": 243.48}
+}
 
 def open_url(url):
     done = False
@@ -144,6 +149,9 @@ def get_data(response):
             done = True
             break
         # add diff data to dict
+        if song["id"] in song_override:
+            data[song["id"]] = song_override["id"]
+            continue
         if song["id"] in data:
             data[song["id"]].update(get_song_data(song))
         else:
