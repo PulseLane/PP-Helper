@@ -23,7 +23,7 @@ There are three main features of PP Helper:
 
 The PP info is composed of 5 parts
 
-![PP Info](/Assets/info.png)
+![PP Info](/PP%20Helper/Assets/info.png)
 
 (1) The pp a pass with the accuracy in (3) is worth on this map.
 
