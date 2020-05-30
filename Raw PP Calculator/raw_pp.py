@@ -38,8 +38,8 @@ pp_curve = [
 ]
 
 song_override = {
-    "2FDDB136BDA7F9E29B4CB6621D6D8E0F8A43B126": {"_ExpertPlus_SoloStandard": 303.61},
-    "27FCBAB3FB731B16EABA14A5D039EEFFD7BD44C9": {"_ExpertPlus_SoloStandard": 243.48}
+    "2FDDB136BDA7F9E29B4CB6621D6D8E0F8A43B126": {"_ExpertPlus_SoloStandard": 288.89},
+    "27FCBAB3FB731B16EABA14A5D039EEFFD7BD44C9": {"_ExpertPlus_SoloStandard": 231.04}
 }
 
 def open_url(url):
