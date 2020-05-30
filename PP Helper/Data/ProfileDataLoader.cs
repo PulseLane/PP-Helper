@@ -122,6 +122,8 @@ namespace PP_Helper.Data
         private DateTime _lastUpdateTime = DateTime.MinValue;
         private bool _downloading = false;
 
+        private ProfileDownloader _profileDownloader;
+
         public void Initialize()
         {
             Logger.log.Debug("Beginning initialization of profile data");
@@ -142,7 +144,11 @@ namespace PP_Helper.Data
                 _downloading = false;
                 Logger.log.Error(e.Message);
             }
+
+            if (DownloadProgress.instance == null)
+                new GameObject("Download Progress").AddComponent<DownloadProgress>();
         }
+
         public void LoadProfileData()
         {
             if (_lastUpdateTime.AddMinutes(1) > DateTime.Now)
@@ -160,9 +166,11 @@ namespace PP_Helper.Data
             Logger.log.Info($"Fetching scoresaber data for user {user}");
 
             // Start downloading and wait for it to finish
-            var profileDownloader = new GameObject("ProfileDownloader").AddComponent<ProfileDownloader>();
-            profileDownloader.OnPageFinished += OnPageFinished;
-            profileDownloader.OnProfileDataFinished += OnProfileDataFinished;
+            _profileDownloader = new GameObject("ProfileDownloader").AddComponent<ProfileDownloader>();
+            DontDestroyOnLoad(_profileDownloader);
+            DownloadProgress.instance.DownloadStart();
+            _profileDownloader.OnPageFinished += OnPageFinished;
+            _profileDownloader.OnProfileDataFinished += OnProfileDataFinished;
         }
 
         public void LevelCleared(StandardLevelScenesTransitionSetupDataSO standardLevelScenesTransitionSetupDataSO, LevelCompletionResults levelCompletionResults)
@@ -227,11 +235,14 @@ namespace PP_Helper.Data
         private void OnPageFinished(int page)
         {
             Logger.log.Debug($"Downloaded page {page}");
+            DownloadProgress.instance.PageDownloaded(page);
         }
 
         private void OnProfileDataFinished(List<SongPage> pages)
         {
             Logger.log.Debug("Finished collecting data - processing now");
+            DownloadProgress.instance.DownloadFinished();
+            Destroy(_profileDownloader);
             _lastUpdateTime = DateTime.Now;
             if (songDataInfo.Count > 0)
                 songDataInfo = new Dictionary<SongID, SongData>();

@@ -134,6 +134,7 @@
     <Compile Include="UI\PP_HelperMenuUI.cs" />
     <Compile Include="UI\Settings.cs" />
     <Compile Include="Utils\BeatSaberUtils.cs" />
+    <Compile Include="UI\DownloadProgress.cs" />
     <Compile Include="Utils\PPUtils.cs" />
     <Compile Include="Utils\ScoreSaberUtils.cs" />
     <Compile Include="Utils\SongDataUtils.cs" />
