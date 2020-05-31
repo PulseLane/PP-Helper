@@ -25,15 +25,15 @@ The PP info is composed of 5 parts
 
 ![PP Info](/PP%20Helper/Assets/info.png)
 
-(1) The pp a pass with the accuracy in (3) is worth on this map.
+* (1) The pp a pass with the accuracy in (3) is worth on this map.
 
-(2) How much pp you will earn from passing with the accuracy in (3)
+* (2) How much pp you will earn from passing with the accuracy in (3)
 
-(3) The currently set accuracy
+* (3) The currently set accuracy
 
-(4) A save button, to save the current accuracy in (3) for auto-loading in the future
+* (4) A save button, to save the current accuracy in (3) for auto-loading in the future
 
-(5) A load button, to load the star accuracy into (3) and delete any saved accuracies
+* (5) A load button, to load the star accuracy into (3) and delete any saved accuracies
 
 This info live updates as you enable/disable modifiers (meaning any song that is not the ranked Overkills will show 0pp if any positive modifiers are selected) and adjust the accuracy.
 
@@ -51,27 +51,27 @@ The three calculation methods are:
 
 * Average of Top N
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This method takes the top N accuracies in the given star range, where N can be defined in the settings, and averages your accuracy to determine the star accuracy
+  * This method takes the top N accuracies in the given star range, where N can be defined in the settings, and averages your accuracy to determine the star accuracy
 
 * Average of All
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This method averages your accuracy across all finished maps in the given star range to determine the star accuracy
+  * This method averages your accuracy across all finished maps in the given star range to determine the star accuracy
 
 * Max
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This method takes your highest accuracy in the given star range and uses that to determine the star accuracy
+  * This method takes your highest accuracy in the given star range and uses that to determine the star accuracy
 
 # UserData
 There are 3 json files used by this mod, located in UserData\PP Helper. There is also a "PP Helper.ini" file in \UserData\ that stores your settings
 
 * AverageStarAcc.json
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This file is automatically formatted, and is set up with the star range as defined above. Feel free to edit this file to customize your star accuracies manually, though be aware that things may break if you don't follow the format correctly. I may add an in-game way to edit this in the future.
+  * This file is automatically formatted, and is set up with the star range as defined above. Feel free to edit this file to customize your star accuracies manually, though be aware that things may break if you don't follow the format correctly. I may add an in-game way to edit this in the future.
 
 * ProfileData.json
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This file stores your scoresaber profile data (and updates automatically as you complete songs with the mod installed!). You should never have a reason to edit this file. If your profile is out-of-sync, use the in-game button under the "Mods" tab to refresh your data.
+  * This file stores your scoresaber profile data (and updates automatically as you complete songs with the mod installed!). You should never have a reason to edit this file. If your profile is out-of-sync, use the in-game button under the "Mods" tab to refresh your data.
 
 * SongSpecificAcc.json
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This file stores your song-specific accuracy overrides. All editing can be done in-game so there should be no reason to edit this file.
+  * This file stores your song-specific accuracy overrides. All editing can be done in-game so there should be no reason to edit this file.
