@@ -103,7 +103,7 @@ namespace PP_Helper.Counters
 
         private void OnNoteMissed(INoteController data)
         {
-            if (data.noteData.noteType != NoteType.Bomb) _totalNotes--;
+            if (data.noteData.noteType != NoteType.Bomb) _totalNotes++;
             UpdateCounter();
         }
 
