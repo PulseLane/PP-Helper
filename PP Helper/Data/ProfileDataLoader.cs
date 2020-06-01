@@ -171,6 +171,7 @@ namespace PP_Helper.Data
             DownloadProgress.instance.DownloadStart();
             _profileDownloader.OnPageFinished += OnPageFinished;
             _profileDownloader.OnProfileDataFinished += OnProfileDataFinished;
+            _profileDownloader.OnErrorDownloading += OnErrorDownloading;
         }
 
         public void LevelCleared(StandardLevelScenesTransitionSetupDataSO standardLevelScenesTransitionSetupDataSO, LevelCompletionResults levelCompletionResults)
@@ -263,6 +264,12 @@ namespace PP_Helper.Data
 
             CalculateSums();
             SaveSongData();
+        }
+
+        private void OnErrorDownloading()
+        {
+            Logger.log.Debug("Ran into error while downloading SS profile");
+            DownloadProgress.instance.ErrorDownloading();
         }
 
         // Go through _songDataInfo and calculate the pp sums

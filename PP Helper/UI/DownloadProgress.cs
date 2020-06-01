@@ -21,9 +21,12 @@ namespace PP_Helper.Utils
 
         private static readonly Vector2 HeaderPosition = new Vector2(10, 15);
         private static readonly Vector2 HeaderSize = new Vector2(100, 20);
+
         private const string DownloadStartedText = "Fetching profile...";
         private const string ProgressText = "Fetched Page";
         private const string DownloadFinishedText = "Processed profile";
+        private const string ErrorText = "Error fetching profile, please wait and retry later";
+
         private const float WaitTime = 2f;
         private const float ProgressFontSize = 15f;
         private TMP_Text _progressText;
@@ -53,6 +56,7 @@ namespace PP_Helper.Utils
 
         public void DownloadStart()
         {
+            _progressText.color = Color.white;
             _canvas.enabled = true;
             _progressText.text = DownloadStartedText;
         }
@@ -64,7 +68,15 @@ namespace PP_Helper.Utils
 
         public void DownloadFinished()
         {
+            _progressText.color = Color.green;
             _progressText.text = DownloadFinishedText;
+            StartCoroutine(RemoveDownloadText());
+        }
+
+        public void ErrorDownloading()
+        {
+            _progressText.color = Color.red;
+            _progressText.text = ErrorText;
             StartCoroutine(RemoveDownloadText());
         }
 

@@ -19,6 +19,7 @@ namespace PP_Helper
         private List<SongPage> pages;
         public Action<int> OnPageFinished;
         public Action<List<SongPage>> OnProfileDataFinished;
+        public Action OnErrorDownloading;
 
         private void Start()
         {
@@ -50,6 +51,7 @@ namespace PP_Helper
                 yield return webRequest.SendWebRequest();
                 if (webRequest.isNetworkError)
                 {
+                    OnErrorDownloading?.Invoke();
                     throw new WebException();
                 }
                 else
