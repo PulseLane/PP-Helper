@@ -268,6 +268,7 @@ namespace PP_Helper.Data
 
         private void OnErrorDownloading()
         {
+            _lastUpdateTime = DateTime.Now;
             Logger.log.Debug("Ran into error while downloading SS profile");
             DownloadProgress.instance.ErrorDownloading();
         }
