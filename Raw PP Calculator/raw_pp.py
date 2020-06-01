@@ -150,7 +150,7 @@ def get_data(response):
             break
         # add diff data to dict
         if song["id"] in song_override:
-            data[song["id"]] = song_override["id"]
+            data[song["id"]] = song_override[song["id"]]
             continue
         if song["id"] in data:
             data[song["id"]].update(get_song_data(song))
