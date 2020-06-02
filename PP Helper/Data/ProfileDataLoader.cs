@@ -128,6 +128,9 @@ namespace PP_Helper.Data
         {
             Logger.log.Debug("Beginning initialization of profile data");
             // Try to load from file, if not available - load from scoresaber
+            if (DownloadProgress.instance == null)
+                new GameObject("Download Progress").AddComponent<DownloadProgress>();
+
             try
             {
                 Logger.log.Debug("Opening file");
@@ -144,9 +147,6 @@ namespace PP_Helper.Data
                 _downloading = false;
                 Logger.log.Error(e.Message);
             }
-
-            if (DownloadProgress.instance == null)
-                new GameObject("Download Progress").AddComponent<DownloadProgress>();
         }
 
         public void LoadProfileData()
@@ -258,7 +258,17 @@ namespace PP_Helper.Data
                     double pp = data.pp;
                     double weight = data.weight;
                     string diff = data.diff;
-                    songDataInfo[new SongID(id, diff)] = new SongData(acc, pp, weight);
+
+                    try
+                    {
+                        ScoreSaberUtils.GetDifficulty(diff);
+                        songDataInfo[new SongID(id, diff)] = new SongData(acc, pp, weight);
+                    }
+                    // Ignore for now - will need to come up with a fix for this
+                    catch (KeyNotFoundException)
+                    {
+                        Logger.log.Debug($"Difficulty not accounted for: {diff} on song {id}");
+                    }
                 }
             }
 
@@ -268,6 +278,7 @@ namespace PP_Helper.Data
 
         private void OnErrorDownloading()
         {
+            _downloading = false;
             _lastUpdateTime = DateTime.Now;
             Logger.log.Debug("Ran into error while downloading SS profile");
             DownloadProgress.instance.ErrorDownloading();
