@@ -110,7 +110,6 @@ namespace PP_Helper.Counters
         private void OnNoteCut(INoteController data, NoteCutInfo info)
         {
             if (data.noteData.noteType != NoteType.Bomb) _totalNotes++;
-            UpdateCounter();
         }
 
         private void UpdateCounter()
