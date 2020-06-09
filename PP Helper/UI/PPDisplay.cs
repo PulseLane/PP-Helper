@@ -85,7 +85,12 @@ namespace PP_Helper.UI
             try
             {
                 IDifficultyBeatmap difficultyBeatmap = _standardLevelDetailView.selectedDifficultyBeatmap;
-                _id = new ProfileDataLoader.SongID(id, difficultyBeatmap.difficulty);
+                var newId = new ProfileDataLoader.SongID(id, difficultyBeatmap.difficulty);
+                // No need to refresh
+                if (_id != null && newId.Equals(_id))
+                    return;
+
+                _id = newId;
 
                 if (SongDataUtils.IsRankedSong(_id))
                 {
