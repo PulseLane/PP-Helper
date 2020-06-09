@@ -4,6 +4,7 @@ using PP_Helper.UI;
 using System;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace PP_Helper
 {
@@ -40,6 +41,11 @@ namespace PP_Helper
         public void setId(string id)
         {
             _id = id;
+        }
+
+        public void InitializeModifiers()
+        {
+            PPDisplay.instance.OnFirstLoad();
         }
 
         public void UpdateModifiers()

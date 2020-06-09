@@ -172,6 +172,11 @@ namespace PP_Helper
             var originalRefreshTotalMultiplierAndRankUI = typeof(GameplayModifiersPanelController).GetMethod("RefreshTotalMultiplierAndRankUI");
             HarmonyMethod harmonyRefreshTotalMultiplierAndRankUI = new HarmonyMethod(typeof(RefreshTotalMultiplierAndRankUIPatch).GetMethod("Postfix", (BindingFlags)(-1)));
             harmony.Patch(originalRefreshTotalMultiplierAndRankUI, postfix: harmonyRefreshTotalMultiplierAndRankUI);
+
+            // GameplayModifiersPanelControllerAwake
+            var originalGameplayModifiersPanelControllerAwake = typeof(GameplayModifiersPanelController).GetMethod("Awake");
+            HarmonyMethod harmonyGameplayModifiersPanelControllerAwake = new HarmonyMethod(typeof(GameplayModifiersPanelControllerAwakePatch).GetMethod("Postfix", (BindingFlags)(-1)));
+            harmony.Patch(originalGameplayModifiersPanelControllerAwake, postfix: harmonyGameplayModifiersPanelControllerAwake);
         }
 
         private void HarmonyPatchSongBrowser()

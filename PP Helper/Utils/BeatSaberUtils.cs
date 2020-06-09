@@ -12,7 +12,7 @@ namespace PP_Helper.Utils
         {
             return modifiers.disappearingArrows ||
                    modifiers.ghostNotes ||
-                   modifiers.fastNotes;
+                   modifiers.songSpeed == GameplayModifiers.SongSpeed.Faster;
         }
 
         public static float GetModifiedAcc(float accuracy, GameplayModifiersModelSO modifiersModel, GameplayModifiers modifiers)

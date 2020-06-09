@@ -118,6 +118,7 @@
     <Compile Include="Data\AccLoader.cs" />
     <Compile Include="Data\RawPPDownloader.cs" />
     <Compile Include="HarmonyPatches\CreateSortButtonsPatch.cs" />
+    <Compile Include="HarmonyPatches\GameplayModifiersPanelControllerAwakePatch.cs" />
     <Compile Include="HarmonyPatches\RefreshTotalMultiplierAndRankUIPatch.cs" />
     <Compile Include="HarmonyPatches\ProcessSongListPatch.cs" />
     <Compile Include="HarmonyPatches\RefreshCurrentSelectionDisplayPatch.cs" />

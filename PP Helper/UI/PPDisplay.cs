@@ -36,6 +36,8 @@ namespace PP_Helper.UI
         private GameObject _loadObject;
 
         private StandardLevelDetailView _standardLevelDetailView;
+        private GameplayModifiersModelSO _modifiersModel;
+        private GameplayModifiers _modifiers;
         private static GameObject _parentObject;
         private float _rawPP = 0f;
         private ProfileDataLoader.SongID _id;
@@ -85,22 +87,12 @@ namespace PP_Helper.UI
                 IDifficultyBeatmap difficultyBeatmap = _standardLevelDetailView.selectedDifficultyBeatmap;
                 _id = new ProfileDataLoader.SongID(id, difficultyBeatmap.difficulty);
 
-                var gameplayModifiersPanelController = Resources.FindObjectsOfTypeAll<GameplayModifiersPanelController>().FirstOrDefault();
-                var modifiersModel = Resources.FindObjectsOfTypeAll<GameplayModifiersModelSO>().First();
-                var modifiers = gameplayModifiersPanelController.GetPrivateField<GameplayModifiers>("_gameplayModifiers");
                 if (SongDataUtils.IsRankedSong(_id))
                 {
                     _parentObject.SetActive(true);
                     _rawPP = SongDataUtils.GetRawPP(_id);
                     LoadAcc();
-                    if (PPUtils.AllowedModifiers(_id.id, modifiers))
-                    {
-                        SetPPText(PPUtils.CalculatePP(_rawPP, BeatSaberUtils.GetModifiedAcc(_accuracy, modifiersModel, modifiers)));
-                    }
-                    else
-                    {
-                        SetPPText(0);
-                    }
+                    SetPPText(PPUtils.AllowedModifiers(_id.id, _modifiers));
                 }
                 else
                 {
@@ -111,6 +103,33 @@ namespace PP_Helper.UI
             {
                 Logger.log.Debug($"error with difficulty for song {id}");
                 _parentObject.SetActive(false);
+            }
+        }
+
+        // Currently only used for modifiers, but could be useful for anything requiring level selection to be loaded
+        internal void OnFirstLoad()
+        {
+            // Modifiers
+            var gameplayModifiersPanelController = Resources.FindObjectsOfTypeAll<GameplayModifiersPanelController>().FirstOrDefault();
+            _modifiersModel = Resources.FindObjectsOfTypeAll<GameplayModifiersModelSO>().First();
+            _modifiers = gameplayModifiersPanelController.GetPrivateField<GameplayModifiers>("_gameplayModifiers");
+            if (_modifiersModel != null)
+            {
+                Logger.log.Info("Modifiers model");
+            }
+            if (_modifiers != null)
+            {
+                Logger.log.Info("Modifiers");
+            }
+        }
+
+        public void ModifiersChanged()
+        {
+            var gameplayModifiersPanelController = Resources.FindObjectsOfTypeAll<GameplayModifiersPanelController>().FirstOrDefault();
+            _modifiers = gameplayModifiersPanelController.GetPrivateField<GameplayModifiers>("_gameplayModifiers");
+            if (SongDataUtils.IsRankedSong(_id))
+            {
+                SetPPText(PPUtils.AllowedModifiers(_id.id, _modifiers));
             }
         }
 
@@ -125,7 +144,7 @@ namespace PP_Helper.UI
         {
             value = (float)Math.Round(value, 2);
             _accuracy = value;
-            SetPPText(PPUtils.CalculatePP(_rawPP, value));
+            SetPPText(true);
         }
 
         [UIAction("saveButtonPressed")]
@@ -143,8 +162,9 @@ namespace PP_Helper.UI
             LoadAcc();
         }
 
-        private void SetPPText(float ppValue)
+        private void SetPPText(bool worthPP)
         {
+            float ppValue = worthPP ? PPUtils.CalculatePP(_rawPP, BeatSaberUtils.GetModifiedAcc(_accuracy, _modifiersModel, _modifiers)) : 0;
             string ppText = Math.Round(ppValue, 2).ToString("0.00");
             var ppGain = Math.Round(PPUtils.GetPPGain(ppValue, _id), 2);
             string ppGainText = ppGain.ToString("0.00");
