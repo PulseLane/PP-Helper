@@ -85,7 +85,18 @@ namespace PP_Helper.Data
 
             foreach (var kvp in ProfileDataLoader.instance.songDataInfo)
             {
-                var star = SongDataUtils.GetRoundedStars(kvp.Key);
+                // If star data not available for song, skip it
+                double star;
+                try
+                {
+                    star = SongDataUtils.GetRoundedStars(kvp.Key);
+                }
+                catch (Exception e)
+                {
+                    Logger.log.Debug($"Couldn't get star rating for {kvp.Key.id}");
+                    continue;
+                }
+
                 // Will definitely be updating acc
                 if (averageAll || counts[star] < numberOfScores)
                 {
