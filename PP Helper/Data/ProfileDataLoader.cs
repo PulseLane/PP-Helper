@@ -207,6 +207,7 @@ namespace PP_Helper.Data
                 if (!songDataInfo.ContainsKey(songID) || acc > songDataInfo[songID].acc)
                 {
                     double pp = PPUtils.CalculatePP(songID, (float) (acc * 100));
+                    int oldIndex = songDataInfo.ContainsKey(songID) ? songIndex[songID] : songIndex.Count;
                     double weight = Double.NegativeInfinity;
                     // Find first song that it's worth more than
                     var i = 0;
@@ -221,10 +222,10 @@ namespace PP_Helper.Data
                         i++;
                     }
 
-                    // found a song it's worth more than, decrease weight of all songs below it
+                    // found a song it's worth more than, decrease weight of songs below it that are above original
                     if (weight != Double.NegativeInfinity)
                     {
-                        for (; i < songOrder.Count; i++)
+                        for (; i < oldIndex; i++)
                         {
                             var song = songOrder[i];
                             songDataInfo[song].weight *= PPUtils.FALLOFF_RATE;
