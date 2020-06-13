@@ -176,6 +176,15 @@ namespace PP_Helper.Data
 
         public void LevelCleared(StandardLevelScenesTransitionSetupDataSO standardLevelScenesTransitionSetupDataSO, LevelCompletionResults levelCompletionResults)
         {
+            Logger.log.Debug("Level cleared");
+            // Score submission disabled or using practice mode
+            if (BS_Utils.Gameplay.ScoreSubmission.WasDisabled || BS_Utils.Gameplay.ScoreSubmission.ProlongedDisabled ||
+                ((GameplayCoreSceneSetupData) standardLevelScenesTransitionSetupDataSO.sceneSetupDataArray.First(x => x.GetType().Equals(typeof(GameplayCoreSceneSetupData)))).practiceSettings != null)
+            {
+                Logger.log.Debug("Practice mode or score disabled");
+                return;
+            }
+
             var gameplayCoreSceneSetupData = ((GameplayCoreSceneSetupData)standardLevelScenesTransitionSetupDataSO.sceneSetupDataArray[1]);
             var difficultyBeatmap = gameplayCoreSceneSetupData.difficultyBeatmap;
 
@@ -184,9 +193,13 @@ namespace PP_Helper.Data
             if (SongDataUtils.IsRankedSong(songID))
             {
                 Logger.log.Debug("Beat ranked song");
+                if (!PPUtils.AllowedModifiers(songID.id, levelCompletionResults.gameplayModifiers))
+                {
+                    Logger.log.Debug("Using invalid modifiers, not updating pp");
+                    return;
+                }
 
-                int score = PPUtils.AllowedModifiers(songID.id, levelCompletionResults.gameplayModifiers)
-                            ? levelCompletionResults.rawScore : levelCompletionResults.modifiedScore;
+                int score = levelCompletionResults.modifiedScore;
                 var maxScore = ScoreModel.MaxRawScoreForNumberOfNotes(difficultyBeatmap.beatmapData.notesCount);
                 double acc = (double) score / (double) maxScore;
 

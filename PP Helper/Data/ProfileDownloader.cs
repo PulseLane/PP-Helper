@@ -56,6 +56,7 @@ namespace PP_Helper
                 }
                 else
                 {
+                    // TODO: modifiers
                     pages.Add(JsonConvert.DeserializeObject<SongPage>(webRequest.downloadHandler.text));
                 }
             }
