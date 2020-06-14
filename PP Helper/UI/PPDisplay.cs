@@ -86,17 +86,18 @@ namespace PP_Helper.UI
             {
                 IDifficultyBeatmap difficultyBeatmap = _standardLevelDetailView.selectedDifficultyBeatmap;
                 var newId = new ProfileDataLoader.SongID(id, difficultyBeatmap.difficulty);
-                // No need to refresh
-                if (_id != null && newId.Equals(_id))
-                    return;
 
-                _id = newId;
-
-                if (SongDataUtils.IsRankedSong(_id))
+                if (SongDataUtils.IsRankedSong(newId))
                 {
                     _parentObject.SetActive(true);
-                    _rawPP = SongDataUtils.GetRawPP(_id);
-                    LoadAcc();
+                    _rawPP = SongDataUtils.GetRawPP(newId);
+                    // Only load the acc in when a new song is selected
+                    if (_id == null || !newId.Equals(_id))
+                    {
+                        _id = newId;
+                        LoadAcc();
+                    }
+
                     SetPPText(PPUtils.AllowedModifiers(_id.id, _modifiers));
                 }
                 else
