@@ -193,13 +193,17 @@ namespace PP_Helper.Data
             if (SongDataUtils.IsRankedSong(songID))
             {
                 Logger.log.Debug("Beat ranked song");
-                if (!PPUtils.AllowedModifiers(songID.id, levelCompletionResults.gameplayModifiers))
+                GameplayModifiers modifiers = new GameplayModifiers(levelCompletionResults.gameplayModifiers);
+                // Remove positive modifiers if not allowed
+                if (!PPUtils.AllowedModifiers(songID.id, modifiers))
                 {
-                    Logger.log.Debug("Using invalid modifiers, not updating pp");
+                    Logger.log.Debug("Using invalid modifiers, removing from score");
+                    modifiers = BeatSaberUtils.RemovePositiveModifiers(modifiers);
                     return;
                 }
 
-                int score = levelCompletionResults.modifiedScore;
+                var multiplier = levelCompletionResults.gameplayModifiersModel.GetTotalMultiplier(modifiers);
+                var score = levelCompletionResults.rawScore * multiplier;
                 var maxScore = ScoreModel.MaxRawScoreForNumberOfNotes(difficultyBeatmap.beatmapData.notesCount);
                 double acc = (double) score / (double) maxScore;
 

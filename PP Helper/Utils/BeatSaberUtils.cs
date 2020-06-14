@@ -19,5 +19,13 @@ namespace PP_Helper.Utils
         {
             return modifiersModel.GetTotalMultiplier(modifiers) * accuracy;
         }
+
+        public static GameplayModifiers RemovePositiveModifiers(GameplayModifiers modifiers)
+        {
+            modifiers.disappearingArrows = false;
+            modifiers.ghostNotes = false;
+            modifiers.songSpeed = GameplayModifiers.SongSpeed.Normal;
+            return modifiers;
+        }
     }
 }
