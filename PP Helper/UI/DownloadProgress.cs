@@ -41,7 +41,7 @@ namespace PP_Helper.Utils
 
             _canvas = gameObject.AddComponent<Canvas>();
             _canvas.renderMode = RenderMode.WorldSpace;
-            _canvas.enabled = true;
+            _canvas.enabled = false;
             var rectTransform = _canvas.transform as RectTransform;
             rectTransform.sizeDelta = CanvasSize;
             instance = this;
