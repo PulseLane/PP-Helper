@@ -24,7 +24,7 @@ namespace PP_Helper.Utils
         {
             modifiers.disappearingArrows = false;
             modifiers.ghostNotes = false;
-            modifiers.songSpeed = GameplayModifiers.SongSpeed.Normal;
+            modifiers.songSpeed = modifiers.songSpeed.Equals(GameplayModifiers.SongSpeed.Faster) ? GameplayModifiers.SongSpeed.Normal : modifiers.songSpeed;
             return modifiers;
         }
     }

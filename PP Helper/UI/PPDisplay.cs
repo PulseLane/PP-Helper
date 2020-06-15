@@ -119,14 +119,6 @@ namespace PP_Helper.UI
             var gameplayModifiersPanelController = Resources.FindObjectsOfTypeAll<GameplayModifiersPanelController>().FirstOrDefault();
             _modifiersModel = Resources.FindObjectsOfTypeAll<GameplayModifiersModelSO>().First();
             _modifiers = gameplayModifiersPanelController.GetPrivateField<GameplayModifiers>("_gameplayModifiers");
-            if (_modifiersModel != null)
-            {
-                Logger.log.Info("Modifiers model");
-            }
-            if (_modifiers != null)
-            {
-                Logger.log.Info("Modifiers");
-            }
         }
 
         public void ModifiersChanged()
@@ -150,7 +142,7 @@ namespace PP_Helper.UI
         {
             value = (float)Math.Round(value, 2);
             _accuracy = value;
-            SetPPText(true);
+            SetPPText(PPUtils.AllowedModifiers(_id.id, _modifiers));
         }
 
         [UIAction("saveButtonPressed")]
@@ -168,16 +160,16 @@ namespace PP_Helper.UI
             LoadAcc();
         }
 
-        private void SetPPText(bool worthPP)
+        private void SetPPText(bool canUsePositiveModifiers)
         {
-            float ppValue = worthPP ? PPUtils.CalculatePP(_rawPP, BeatSaberUtils.GetModifiedAcc(_accuracy, _modifiersModel, _modifiers)) : 0;
+            float ppValue = canUsePositiveModifiers ? PPUtils.CalculatePP(_rawPP, BeatSaberUtils.GetModifiedAcc(_accuracy, _modifiersModel, _modifiers))
+                            : PPUtils.CalculatePP(_rawPP, BeatSaberUtils.GetModifiedAcc(_accuracy, _modifiersModel, BeatSaberUtils.RemovePositiveModifiers(_modifiers)));
             string ppText = Math.Round(ppValue, 2).ToString("0.00");
             var ppGain = Math.Round(PPUtils.GetPPGain(ppValue, _id), 2);
             string ppGainText = ppGain.ToString("0.00");
             var color = ppGain > 0 ? "green" : "red";
             _ppText.SetText($"{ppText} (<color=\"{color}\">+{ppGain}</color>)");
         }
-
 
         private void LoadAcc()
         {
