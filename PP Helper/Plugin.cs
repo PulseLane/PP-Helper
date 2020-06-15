@@ -138,10 +138,14 @@ namespace PP_Helper
             BS_Utils.Utilities.BSEvents.lateMenuSceneLoadedFresh -= OnMenuSceneLoadedFresh;
             BS_Utils.Utilities.BSEvents.levelSelected -= OnLevelSelected;
             BS_Utils.Utilities.BSEvents.gameSceneActive -= OnGameSceneActive;
+            BS_Utils.Utilities.BSEvents.levelCleared -= OnLevelCleared;
 
             BSMLSettings.instance.RemoveSettingsMenu(Settings.instance);
             harmony.UnpatchAll("com.PulseLane.BeatSaber.PP_Helper");
-            // TODO: Clean up singletones
+
+            ProfileDataLoader.instance.Dispose();
+            RawPPLoader.Dispose();
+
             // TODO: remove counter
         }
 

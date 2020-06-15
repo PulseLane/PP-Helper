@@ -20,8 +20,6 @@ namespace PP_Helper.Data
     static class RawPPLoader
     {
         private static bool init = false;
-        // temporary
-        private static string RAW_PP_FILE = Environment.CurrentDirectory + "/UserData/PP Helper/raw_pp.json";
         private static Dictionary<string, RawPPData> _songData;
 
         // Load up the Raw PP data
@@ -81,6 +79,12 @@ namespace PP_Helper.Data
                     Logger.log.Error("Unknown beatmap difficulty: " + songID.difficulty.ToString());
                     throw new Exception("Unknown difficultry");
             }
+        }
+
+        public static void Dispose()
+        {
+            init = false;
+            _songData = null;
         }
     }
 }

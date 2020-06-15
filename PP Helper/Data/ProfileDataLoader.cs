@@ -251,6 +251,18 @@ namespace PP_Helper.Data
             }
         }
 
+        // I don't know how C# garbage collection works so I hope this works?
+        // Clean up resources
+        public void Dispose()
+        {
+            songDataInfo = null;
+            songIndex = null;
+            songOrder = null;
+            ppTopBottomSum = null;
+            ppBottomUpSum = null;
+            Destroy(_profileDownloader);
+        }
+
         private void OnPageFinished(int page)
         {
             Logger.log.Debug($"Downloaded page {page}");
