@@ -12,7 +12,7 @@ namespace PP_Helper.Utils
     // Credit to SongCore for most of this code - https://github.com/Kylemc1413/SongCore/blob/5e2d9da3761d3ecf3763dc984d8baaca6de76d91/ProgressBar.cs
     public class DownloadProgress : MonoBehaviour
     {
-        private static readonly Vector3 Position = new Vector3(-2.5f, 2.5f, 2.5f);
+        private static readonly Vector3 Position = new Vector3(-3.75f, 2.85f, 2.5f);
         private static readonly Vector3 Rotation = new Vector3(0, -60f, 0);
         private static readonly Vector3 Scale = new Vector3(0.01f, 0.01f, 0.01f);
 
@@ -22,9 +22,10 @@ namespace PP_Helper.Utils
         private static readonly Vector2 HeaderPosition = new Vector2(10, 15);
         private static readonly Vector2 HeaderSize = new Vector2(100, 20);
 
-        private const string DownloadStartedText = "Fetching profile...";
-        private const string ProgressText = "Fetched Page";
-        private const string DownloadFinishedText = "Processed profile";
+        private const string Prefix = "PPHelper - ";
+        private const string DownloadStartedText = "Fetching Scoresaber Profile...";
+        private const string ProgressText = "Fetched ScoreSaber Page";
+        private const string DownloadFinishedText = "Processed Profile";
         private const string ErrorText = "Error fetching profile, please wait and retry later";
 
         private const float WaitTime = 2f;
@@ -40,7 +41,7 @@ namespace PP_Helper.Utils
 
             _canvas = gameObject.AddComponent<Canvas>();
             _canvas.renderMode = RenderMode.WorldSpace;
-            _canvas.enabled = false;
+            _canvas.enabled = true;
             var rectTransform = _canvas.transform as RectTransform;
             rectTransform.sizeDelta = CanvasSize;
             instance = this;
@@ -50,7 +51,7 @@ namespace PP_Helper.Utils
             rectTransform.SetParent(_canvas.transform, false);
             rectTransform.anchoredPosition = HeaderPosition;
             rectTransform.sizeDelta = HeaderSize;
-            _progressText.text = ProgressText;
+            _progressText.text = Prefix + ProgressText;
             _progressText.fontSize = ProgressFontSize;
         }
 
@@ -58,25 +59,25 @@ namespace PP_Helper.Utils
         {
             _progressText.color = Color.white;
             _canvas.enabled = true;
-            _progressText.text = DownloadStartedText;
+            _progressText.text = Prefix + DownloadStartedText;
         }
 
         public void PageDownloaded(int pageNumber)
         {
-            _progressText.text = ProgressText + $" {pageNumber}";
+            _progressText.text = Prefix + ProgressText + $" {pageNumber}";
         }
 
         public void DownloadFinished()
         {
             _progressText.color = Color.green;
-            _progressText.text = DownloadFinishedText;
+            _progressText.text = Prefix + DownloadFinishedText;
             StartCoroutine(RemoveDownloadText());
         }
 
         public void ErrorDownloading()
         {
             _progressText.color = Color.red;
-            _progressText.text = ErrorText;
+            _progressText.text = Prefix + ErrorText;
             StartCoroutine(RemoveDownloadText());
         }
 
