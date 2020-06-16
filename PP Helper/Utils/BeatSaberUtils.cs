@@ -22,10 +22,11 @@ namespace PP_Helper.Utils
 
         public static GameplayModifiers RemovePositiveModifiers(GameplayModifiers modifiers)
         {
-            modifiers.disappearingArrows = false;
-            modifiers.ghostNotes = false;
-            modifiers.songSpeed = modifiers.songSpeed.Equals(GameplayModifiers.SongSpeed.Faster) ? GameplayModifiers.SongSpeed.Normal : modifiers.songSpeed;
-            return modifiers;
+            GameplayModifiers newModifiers = new GameplayModifiers(modifiers);
+            newModifiers.disappearingArrows = false;
+            newModifiers.ghostNotes = false;
+            newModifiers.songSpeed = newModifiers.songSpeed.Equals(GameplayModifiers.SongSpeed.Faster) ? GameplayModifiers.SongSpeed.Normal : newModifiers.songSpeed;
+            return newModifiers;
         }
     }
 }
