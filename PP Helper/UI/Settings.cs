@@ -101,5 +101,16 @@ namespace PP_Helper.UI
                 Config.Write();
             }
         }
+
+        [UIValue("autoUpdate")]
+        public bool autoUpdate
+        {
+            get => Config.autoUpdate;
+            set
+            {
+                Config.autoUpdate = value;
+                Config.Write();
+            }
+        }
     }
 }

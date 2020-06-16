@@ -7,4 +7,5 @@
   <dropdown-list-setting text="Star Acc. Calculation" hover-hint="How to calculate the star accuracy" value="starAccChoice" choices="starAccOptions"></dropdown-list-setting>
   <increment-setting text="Number of Scores" value="numberOfScores" hover-hint="How many scores to use if using the 'Top N Scores' calculation option" min="1" max="25" increment="1" integer-only="true" ></increment-setting>
   <checkbox-setting text="Better Acc. Override" hover-hint="When calculating star acc, use the better of current and higher star accuracies" value="accOverride"></checkbox-setting>
+  <checkbox-setting text="Auto Profile Update" hover-hint="Automatically update profile data when beating a ranked song. If disabled, will require manual syncing to update." value="autoUpdate"></checkbox-setting>
 </scrollable-settings-container>

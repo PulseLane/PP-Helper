@@ -14,6 +14,7 @@ namespace PP_Helper
         public static CalculationType starAccChoice = CalculationType.AverageOfTopN;
         public static int numberOfScores = 3;
         public static bool accOverride = true;
+        public static bool autoUpdate = true;
 
         public static bool ignoreNoFail = true;
         public static bool hideOnStart = false;
@@ -29,6 +30,7 @@ namespace PP_Helper
             starAccChoice = Enum.TryParse(config.GetString("PP Helper", "starAccChoice", "AverageOfTopN", true), out CalculationType choice) ? choice : CalculationType.AverageOfTopN;
             numberOfScores = config.GetInt("PP Helper", "numberOfScores", 3, true);
             accOverride = config.GetBool("PP Helper", "accOverride", true, true);
+            autoUpdate = config.GetBool("PP Helper", "autoUpdate", true, true);
 
             ignoreNoFail = config.GetBool("PP Helper", "ignoreNoFail", true, true);
             hideOnStart = config.GetBool("PP Helper", "hideOnStart", false, true);
@@ -45,6 +47,7 @@ namespace PP_Helper
             config.SetString("PP Helper", "starAccChoice", starAccChoice.ToString());
             config.SetInt("PP Helper", "numberOfScores", numberOfScores);
             config.SetBool("PP Helper", "accOverride", accOverride);
+            config.SetBool("PP Helper", "autoUpdate", autoUpdate);
 
             config.SetBool("PP Helper", "ignoreNoFail", ignoreNoFail);
             config.SetBool("PP Helper", "hideOnStart", hideOnStart);

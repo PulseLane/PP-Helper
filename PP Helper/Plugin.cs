@@ -126,7 +126,8 @@ namespace PP_Helper
         }
         public void OnLevelCleared(StandardLevelScenesTransitionSetupDataSO standardLevelScenesTransitionSetupDataSO, LevelCompletionResults levelCompletionResults)
         {
-            ProfileDataLoader.instance.LevelCleared(standardLevelScenesTransitionSetupDataSO, levelCompletionResults);
+            if (Config.autoUpdate)
+                ProfileDataLoader.instance.LevelCleared(standardLevelScenesTransitionSetupDataSO, levelCompletionResults);
         }
 
         [OnDisable]
