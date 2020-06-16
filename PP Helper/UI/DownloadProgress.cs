@@ -12,7 +12,7 @@ namespace PP_Helper.Utils
     // Credit to SongCore for most of this code - https://github.com/Kylemc1413/SongCore/blob/5e2d9da3761d3ecf3763dc984d8baaca6de76d91/ProgressBar.cs
     public class DownloadProgress : MonoBehaviour
     {
-        private static readonly Vector3 Position = new Vector3(-3.75f, 2.85f, 2.5f);
+        private static readonly Vector3 Position = new Vector3(-3f, 2.6f, 1.7f);
         private static readonly Vector3 Rotation = new Vector3(0, -60f, 0);
         private static readonly Vector3 Scale = new Vector3(0.01f, 0.01f, 0.01f);
 
