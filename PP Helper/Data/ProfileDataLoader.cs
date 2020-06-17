@@ -199,17 +199,17 @@ namespace PP_Helper.Data
                 {
                     Logger.log.Debug("Using invalid modifiers, removing from score");
                     modifiers = BeatSaberUtils.RemovePositiveModifiers(modifiers);
-                    return;
                 }
 
                 var multiplier = levelCompletionResults.gameplayModifiersModel.GetTotalMultiplier(modifiers);
                 var score = levelCompletionResults.rawScore * multiplier;
                 var maxScore = ScoreModel.MaxRawScoreForNumberOfNotes(difficultyBeatmap.beatmapData.notesCount);
                 double acc = (double) score / (double) maxScore;
-
+                Logger.log.Debug($"acc: {acc}");
                 // Unplayed or better than previous acc
                 if (!songDataInfo.ContainsKey(songID) || acc > songDataInfo[songID].acc)
                 {
+                    Logger.log.Debug("Unplayed or better score");
                     double pp = PPUtils.CalculatePP(songID, (float) (acc * 100));
                     int oldIndex = songDataInfo.ContainsKey(songID) ? songIndex[songID] : songIndex.Count;
                     double weight = Double.NegativeInfinity;
