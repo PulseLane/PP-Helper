@@ -20,6 +20,26 @@ namespace PP_Helper.Utils
             return _difficultyDict[difficulty];
         }
 
+        public static BeatmapDifficulty GetDifficulty(int difficulty)
+        {
+            switch (difficulty)
+            {
+                case 1:
+                    return BeatmapDifficulty.Easy;
+                case 3:
+                    return BeatmapDifficulty.Normal;
+                case 5:
+                    return BeatmapDifficulty.Hard;
+                case 7:
+                    return BeatmapDifficulty.Expert;
+                case 9:
+                    return BeatmapDifficulty.ExpertPlus;
+                default:
+                    Logger.log.Debug($"Unknown difficulty: {difficulty}");
+                    throw new ArgumentException();
+            }
+        }
+
         public static string GetDifficultyAsString(BeatmapDifficulty difficulty)
         {
             foreach (var kvp in _difficultyDict)

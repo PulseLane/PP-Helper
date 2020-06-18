@@ -14,23 +14,22 @@ namespace PP_Helper.Data
     {
         public class ProfileData
         {
+            public long rank;
             public long scoreId;
-            public long leaderboardId;
             public long score;
-            public long uScore;
+            public long unmodifiedScore;
             public string mods;
-            public string playerId;
-            public string timeset;
             public double pp;
             public double weight;
-            public string id;
-            public string name;
+            public string timeset;
+            public long leaderboardId;
+            public string songHash;
+            public string songName;
             public string songSubName;
             public string songAuthorName;
             public string levelAuthorName;
-            public string diff;
-            public long maxScoreEx;
-            public long rank;
+            public int difficulty;
+            public long maxScore;
         }
 
         public class SongPage
@@ -282,20 +281,20 @@ namespace PP_Helper.Data
             {
                 foreach (ProfileData data in songPage.scores)
                 {
-                    string id = data.id;
-                    double acc = (double)data.score / (double)data.maxScoreEx;
+                    string id = data.songHash;
+                    double acc = (double)data.score / (double)data.maxScore;
                     acc = acc.Equals(Double.PositiveInfinity) ? 1 : acc;
                     double pp = data.pp;
                     double weight = data.weight;
-                    string diff = data.diff;
+                    int diff = data.difficulty;
 
                     try
                     {
                         ScoreSaberUtils.GetDifficulty(diff);
-                        songDataInfo[new SongID(id, diff)] = new SongData(acc, pp, weight);
+                        songDataInfo[new SongID(id, ScoreSaberUtils.GetDifficulty(diff))] = new SongData(acc, pp, weight);
                     }
                     // Ignore for now - will need to come up with a fix for this
-                    catch (KeyNotFoundException)
+                    catch (ArgumentException)
                     {
                         Logger.log.Debug($"Difficulty not accounted for: {diff} on song {id}");
                     }
