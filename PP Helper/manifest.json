@@ -3,7 +3,7 @@
   "id": "PP_Helper",
   "name": "PP Helper",
   "author": "PulseLane",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Adds various useful utilities related to pp",
   "gameVersion": "1.10.0",
   "dependsOn": {

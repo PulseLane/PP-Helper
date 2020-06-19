@@ -27,6 +27,11 @@ namespace PP_Helper.Counters
         // Mostly just copying from Deviation Counter
         void Start()
         {
+            if (Resources.FindObjectsOfTypeAll<CoreGameHUDController>()?.FirstOrDefault(x => x.isActiveAndEnabled) == null)
+            {
+                Logger.log.Debug("HUD disabled");
+                return;
+            }
             StartCoroutine(FindBeatMapObjectManager());
             StartCoroutine(FindScoreController());
             StartCoroutine(FindDifficultyBeatmap());
