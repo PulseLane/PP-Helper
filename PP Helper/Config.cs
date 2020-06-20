@@ -1,5 +1,6 @@
 ﻿using System;
 using static PP_Helper.Data.StarAccCalculator;
+using static PP_Helper.SongBrowser.SongSorting;
 
 namespace PP_Helper
 {
@@ -15,6 +16,7 @@ namespace PP_Helper
         public static int numberOfScores = 3;
         public static bool accOverride = true;
         public static bool autoUpdate = true;
+        public static SortMethod sortMethod = SortMethod.PPGain;
 
         public static bool ignoreNoFail = true;
         public static bool hideOnStart = false;
@@ -27,10 +29,11 @@ namespace PP_Helper
             ppTop = config.GetBool("PP Helper", "ppTop", false, true);
             accIncrement = config.GetFloat("PP Helper", "accIncrement", 0.1f, true);
             starRange = config.GetFloat("PP Helper", "starRange", 0.5f, true);
-            starAccChoice = Enum.TryParse(config.GetString("PP Helper", "starAccChoice", "AverageOfTopN", true), out CalculationType choice) ? choice : CalculationType.AverageOfTopN;
+            starAccChoice = Enum.TryParse(config.GetString("PP Helper", "starAccChoice", "AverageOfTopN", true), out CalculationType starChoice) ? starChoice : CalculationType.AverageOfTopN;
             numberOfScores = config.GetInt("PP Helper", "numberOfScores", 3, true);
             accOverride = config.GetBool("PP Helper", "accOverride", true, true);
             autoUpdate = config.GetBool("PP Helper", "autoUpdate", true, true);
+            sortMethod = Enum.TryParse(config.GetString("PP Helper", "sortMethod", "PPGain", true), out SortMethod sortChoice) ? sortChoice : SortMethod.PPGain;
 
             ignoreNoFail = config.GetBool("PP Helper", "ignoreNoFail", true, true);
             hideOnStart = config.GetBool("PP Helper", "hideOnStart", false, true);
@@ -48,6 +51,7 @@ namespace PP_Helper
             config.SetInt("PP Helper", "numberOfScores", numberOfScores);
             config.SetBool("PP Helper", "accOverride", accOverride);
             config.SetBool("PP Helper", "autoUpdate", autoUpdate);
+            config.SetString("PP Helper", "sortMethod", sortMethod.ToString());
 
             config.SetBool("PP Helper", "ignoreNoFail", ignoreNoFail);
             config.SetBool("PP Helper", "hideOnStart", hideOnStart);

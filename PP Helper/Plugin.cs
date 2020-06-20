@@ -8,6 +8,7 @@ using PP_Helper.Data;
 using PP_Helper.HarmonyPatches;
 using PP_Helper.UI;
 using PP_Helper.Utils;
+using SemVer;
 using SongBrowser;
 using SongBrowser.UI;
 using System;
@@ -26,6 +27,7 @@ namespace PP_Helper
         public static readonly string DIRECTORY = Path.Combine(Environment.CurrentDirectory, "UserData", "PP Helper");
         // To be used at some point?
         List<SongDataCore.BeatStar.BeatStarSongDifficultyStats> stats;
+        private const string SongBrowserPluginId = "SongBrowser";
 
         internal static Plugin instance { get; private set; }
         internal static string Name => "PP Helper";
@@ -51,13 +53,13 @@ namespace PP_Helper
                 HarmonyPatchBase();
 
                 // SongBrowser integration
-                if (PluginManager.EnabledPlugins.Any(x => x.Id == "SongBrowser"))
+                if (SongBrowserInstalled())
                 {
                     Logger.log.Info("SongBrowser installed, using harmony patches");
                     HarmonyPatchSongBrowser();
                 }
                 else
-                    Logger.log.Debug("SongBrowser not installed");
+                    Logger.log.Debug("SongBrowser not installed (or not using recent enough version)");
             }
             catch (Exception e)
             {
@@ -184,6 +186,14 @@ namespace PP_Helper
             harmony.Patch(originalGameplayModifiersPanelControllerAwake, postfix: harmonyGameplayModifiersPanelControllerAwake);
         }
 
+        // Thanks EnhancedSearchAndFilters
+        private bool SongBrowserInstalled()
+        {
+            Range validVersionRange = new Range("^6.0.6");
+            return PluginManager.EnabledPlugins.Any(x => x.Id == SongBrowserPluginId) &&
+                   validVersionRange.IsSatisfied(PluginManager.GetPluginFromId(SongBrowserPluginId)?.Version);
+        }
+
         private void HarmonyPatchSongBrowser()
         {
             // CreateSortButtons
@@ -195,11 +205,6 @@ namespace PP_Helper
             var originalRefreshCurrentSelectionDisplay = typeof(SongBrowserUI).GetMethod("RefreshCurrentSelectionDisplay", (BindingFlags)(-1));
             HarmonyMethod harmonyRefreshCurrentSelectionDisplay = new HarmonyMethod(typeof(RefreshCurrentSelectionDisplayPatch).GetMethod("Postfix", (BindingFlags)(-1)));
             harmony.Patch(originalRefreshCurrentSelectionDisplay, postfix: harmonyRefreshCurrentSelectionDisplay);
-
-            // ProcessSongList
-            var originalProcessSongList = typeof(SongBrowserModel).GetMethod("ProcessSongList", (BindingFlags)(-1));
-            HarmonyMethod harmonyProcessSongList = new HarmonyMethod(typeof(ProcessSongListPatch).GetMethod("Prefix", (BindingFlags)(-1)));
-            harmony.Patch(originalProcessSongList, prefix: harmonyProcessSongList);
         }
 
     }

@@ -68,6 +68,9 @@
     <Reference Include="Polyglot">
       <HintPath>F:\Steam\steamapps\common\Beat Saber\Beat Saber_Data\Managed\Polyglot.dll</HintPath>
     </Reference>
+    <Reference Include="SemVer">
+      <HintPath>F:\Steam\steamapps\common\Beat Saber\Libs\SemVer.dll</HintPath>
+    </Reference>
     <Reference Include="SongBrowser">
       <HintPath>F:\Steam\steamapps\common\Beat Saber\Plugins\SongBrowser.dll</HintPath>
     </Reference>
@@ -119,9 +122,8 @@
     <Compile Include="Data\RawPPDownloader.cs" />
     <Compile Include="HarmonyPatches\CreateSortButtonsPatch.cs" />
     <Compile Include="HarmonyPatches\GameplayModifiersPanelControllerAwakePatch.cs" />
-    <Compile Include="HarmonyPatches\RefreshTotalMultiplierAndRankUIPatch.cs" />
-    <Compile Include="HarmonyPatches\ProcessSongListPatch.cs" />
     <Compile Include="HarmonyPatches\RefreshCurrentSelectionDisplayPatch.cs" />
+    <Compile Include="HarmonyPatches\RefreshTotalMultiplierAndRankUIPatch.cs" />
     <Compile Include="HarmonyPatches\StandardLevelDetailViewRefreshContent.cs" />
     <Compile Include="Data\ProfileDataLoader.cs" />
     <Compile Include="Data\RawPPLoader.cs" />
@@ -138,6 +140,7 @@
     <Compile Include="Utils\BeatSaberUtils.cs" />
     <Compile Include="UI\DownloadProgress.cs" />
     <Compile Include="Utils\PPUtils.cs" />
+    <Compile Include="Utils\ReflectionUtils.cs" />
     <Compile Include="Utils\ScoreSaberUtils.cs" />
     <Compile Include="Utils\SongDataUtils.cs" />
   </ItemGroup>

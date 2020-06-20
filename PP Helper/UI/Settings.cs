@@ -1,9 +1,11 @@
 ﻿using BeatSaberMarkupLanguage.Attributes;
 using PP_Helper.Data;
+using PP_Helper.SongBrowser;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using static PP_Helper.Data.StarAccCalculator;
+using static PP_Helper.SongBrowser.SongSorting;
 
 namespace PP_Helper.UI
 {
@@ -66,7 +68,7 @@ namespace PP_Helper.UI
         }
 
         [UIValue("starAccOptions")]
-        private List<object> options = Enum.GetValues(typeof(CalculationType)).Cast<CalculationType>()
+        private List<object> starOptions = Enum.GetValues(typeof(CalculationType)).Cast<CalculationType>()
                                         .Select(x => StarAccCalculator.ToFriendlyString(x)).Cast<object>().ToList();
 
         [UIValue("starAccChoice")]
@@ -112,5 +114,20 @@ namespace PP_Helper.UI
                 Config.Write();
             }
         }
+
+        [UIValue("sortMethod")]
+        public string sortMethod
+        {
+            get => Config.sortMethod.ToString();
+            set
+            {
+                Config.sortMethod = Enum.TryParse(value, out SortMethod sortChoice) ? sortChoice : SortMethod.PPGain;
+                Config.Write();
+            }
+        }
+
+        [UIValue("sortOptions")]
+        private List<object> sortOptions = Enum.GetValues(typeof(SortMethod)).Cast<SortMethod>()
+                                        .Select(x => x.ToString()).Cast<object>().ToList();
     }
 }
