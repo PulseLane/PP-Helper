@@ -36,6 +36,7 @@ namespace PP_Helper.Counters
             StartCoroutine(FindScoreController());
             StartCoroutine(FindDifficultyBeatmap());
 
+            gameObject.transform.localScale = Vector3.zero;
             Canvas canvas = gameObject.AddComponent<Canvas>();
             canvas.renderMode = RenderMode.WorldSpace;
             CanvasScaler cs = gameObject.AddComponent<CanvasScaler>();
