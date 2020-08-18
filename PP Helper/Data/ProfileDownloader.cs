@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using PP_Helper.Utils;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,9 +14,7 @@ namespace PP_Helper
     public class ProfileDownloader : MonoBehaviour
     {
         private const string URI_PREFIX = "https://new.scoresaber.com/api/player/";
-        private const int MAX_PAGE = 50;
         private const double EPSILON = 0.001; // pp gets rounded to 2 decimal places anyway
-        private const float WAIT_TIME_SECONDS = 0.5f;
         private List<SongPage> pages;
         public Action<int> OnPageFinished;
         public Action<List<SongPage>> OnProfileDataFinished;
@@ -31,13 +30,12 @@ namespace PP_Helper
         {
             int page = 1;
             ulong id = BS_Utils.Gameplay.GetUserInfo.GetUserID();
-            while (page <= MAX_PAGE && !IsFinished())
+            while (!IsFinished())
             {
                 yield return StartCoroutine(GetProfilePage(id, page));
 
                 OnPageFinished?.Invoke(page);
                 page++;
-                yield return new WaitForSeconds(WAIT_TIME_SECONDS);
             }
             OnProfileDataFinished?.Invoke(pages);
         }
@@ -58,6 +56,16 @@ namespace PP_Helper
                 {
                     // TODO: modifiers
                     pages.Add(JsonConvert.DeserializeObject<SongPage>(webRequest.downloadHandler.text));
+                    var responseHeaders = webRequest.GetResponseHeaders();
+                    var remaining = responseHeaders["x-ratelimit-remaining"];
+                    Logger.log.Debug($"Rate limit remaining: {remaining}");
+                    if (responseHeaders["x-ratelimit-remaining"].Equals("0"))
+                    {
+                        var resetTime = UnixTimeStampToDateTime(Convert.ToInt64(responseHeaders["x-ratelimit-reset"]) + 1);
+                        Logger.log.Debug($"Hit rate limit, waiting until {resetTime}");
+                        DownloadProgress.instance.WaitUntil(resetTime.ToLocalTime());
+                        yield return new WaitUntil(() => DateTime.UtcNow > resetTime);
+                    }
                 }
             }
         }
@@ -78,6 +86,11 @@ namespace PP_Helper
             }
 
             return false;
+        }
+
+        private static DateTime UnixTimeStampToDateTime(long timeStamp)
+        {
+            return DateTimeOffset.FromUnixTimeSeconds(timeStamp).DateTime;
         }
     }
 }

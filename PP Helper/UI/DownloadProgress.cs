@@ -27,6 +27,7 @@ namespace PP_Helper.Utils
         private const string ProgressText = "Fetched ScoreSaber Page";
         private const string DownloadFinishedText = "Processed Profile";
         private const string ErrorText = "Error fetching profile, please wait and retry later";
+        private const string WaitText = "Rate limit hit, waiting until ";
 
         private const float WaitTime = 2f;
         private const float ProgressFontSize = 15f;
@@ -79,6 +80,15 @@ namespace PP_Helper.Utils
             _progressText.color = Color.red;
             _progressText.text = Prefix + ErrorText;
             StartCoroutine(RemoveDownloadText());
+        }
+
+        public void WaitUntil(DateTime time)
+        {
+            _progressText.color = Color.white;
+            var hour = time.Hour.ToString("D2");
+            var minute = time.Minute.ToString("D2");
+            var second = time.Second.ToString("D2");
+            _progressText.text = Prefix + WaitText + hour + ":" + minute + ":" + second;
         }
 
         IEnumerator RemoveDownloadText()
