@@ -115,6 +115,17 @@ namespace PP_Helper.UI
             }
         }
 
+        [UIValue("playHistory")]
+        public bool playHistory
+        {
+            get => Config.playHistory;
+            set
+            {
+                Config.playHistory = value;
+                Config.Write();
+            }
+        }
+
         [UIValue("sortMethod")]
         public string sortMethod
         {

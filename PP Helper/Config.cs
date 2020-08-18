@@ -16,6 +16,7 @@ namespace PP_Helper
         public static int numberOfScores = 3;
         public static bool accOverride = true;
         public static bool autoUpdate = true;
+        public static bool playHistory = true;
         public static SortMethod sortMethod = SortMethod.PPGain;
 
         public static bool ignoreNoFail = true;
@@ -33,6 +34,7 @@ namespace PP_Helper
             numberOfScores = config.GetInt("PP Helper", "numberOfScores", 3, true);
             accOverride = config.GetBool("PP Helper", "accOverride", true, true);
             autoUpdate = config.GetBool("PP Helper", "autoUpdate", true, true);
+            playHistory = config.GetBool("PP Helper", "playHistory", true, true);
             sortMethod = Enum.TryParse(config.GetString("PP Helper", "sortMethod", "PPGain", true), out SortMethod sortChoice) ? sortChoice : SortMethod.PPGain;
 
             ignoreNoFail = config.GetBool("PP Helper", "ignoreNoFail", true, true);
@@ -51,6 +53,7 @@ namespace PP_Helper
             config.SetInt("PP Helper", "numberOfScores", numberOfScores);
             config.SetBool("PP Helper", "accOverride", accOverride);
             config.SetBool("PP Helper", "autoUpdate", autoUpdate);
+            config.SetBool("PP Helper", "playHistory", playHistory);
             config.SetString("PP Helper", "sortMethod", sortMethod.ToString());
 
             config.SetBool("PP Helper", "ignoreNoFail", ignoreNoFail);

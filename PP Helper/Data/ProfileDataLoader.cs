@@ -29,6 +29,7 @@ namespace PP_Helper.Data
             public string songAuthorName;
             public string levelAuthorName;
             public int difficulty;
+            public string difficultyRaw;
             public long maxScore;
         }
 
@@ -132,7 +133,7 @@ namespace PP_Helper.Data
 
             try
             {
-                Logger.log.Debug("Opening file");
+                Logger.log.Debug("Opening profile data");
                 songDataInfo = JsonConvert.DeserializeObject<Dictionary<SongID, SongData>>(File.ReadAllText(FILE_NAME));
                 Logger.log.Debug("Loaded existing profile data");
                 CalculateSums();
@@ -188,10 +189,11 @@ namespace PP_Helper.Data
             var difficultyBeatmap = gameplayCoreSceneSetupData.difficultyBeatmap;
 
             SongID songID = SongDataUtils.GetSongID(difficultyBeatmap);
-            // Only update for ranked songs
-            if (SongDataUtils.IsRankedSong(songID))
+
+            // I don't like putting play history here but until I do a refactor I'm gonna keep it here
+            if (SongDataUtils.IsRankedSong(songID) || Config.playHistory)
             {
-                Logger.log.Debug("Beat ranked song");
+                Logger.log.Debug("Beat song");
                 GameplayModifiers modifiers = new GameplayModifiers(levelCompletionResults.gameplayModifiers);
                 // Remove positive modifiers if not allowed
                 if (!PPUtils.AllowedModifiers(songID.id, modifiers))
@@ -205,48 +207,57 @@ namespace PP_Helper.Data
                 var maxScore = ScoreModel.MaxRawScoreForNumberOfNotes(difficultyBeatmap.beatmapData.notesCount);
                 double acc = (double) score / (double) maxScore;
                 Logger.log.Debug($"acc: {acc}");
-                // Unplayed or better than previous acc
-                if (!songDataInfo.ContainsKey(songID) || acc > songDataInfo[songID].acc)
+
+                if (SongDataUtils.IsRankedSong(songID))
+                    SubmitPlay(songID, acc);
+                else
+                    PlayHistoryTracker.UpdatePlayHistory(songID, acc);
+            }
+        }
+
+        public void SubmitPlay(SongID songID, double acc)
+        {
+            // Unplayed or better than previous acc
+            if (!songDataInfo.ContainsKey(songID) || acc > songDataInfo[songID].acc)
+            {
+                Logger.log.Debug("Unplayed or better score");
+                double pp = PPUtils.CalculatePP(songID, (float)(acc * 100));
+                int oldIndex = songDataInfo.ContainsKey(songID) ? songIndex[songID] : songIndex.Count;
+                double weight = Double.NegativeInfinity;
+                // Find first song that it's worth more than
+                var i = 0;
+                foreach (var song in songOrder)
                 {
-                    Logger.log.Debug("Unplayed or better score");
-                    double pp = PPUtils.CalculatePP(songID, (float) (acc * 100));
-                    int oldIndex = songDataInfo.ContainsKey(songID) ? songIndex[songID] : songIndex.Count;
-                    double weight = Double.NegativeInfinity;
-                    // Find first song that it's worth more than
-                    var i = 0;
-                    foreach (var song in songOrder)
+                    var songWorth = songDataInfo[song].pp;
+                    if (songWorth < pp)
                     {
-                        var songWorth = songDataInfo[song].pp;
-                        if (songWorth < pp)
-                        {
-                            weight = songDataInfo[song].weight;
-                            break;
-                        }
-                        i++;
+                        weight = songDataInfo[song].weight;
+                        break;
                     }
-
-                    // found a song it's worth more than, decrease weight of songs below it that are above original
-                    if (weight != Double.NegativeInfinity)
-                    {
-                        for (; i < oldIndex; i++)
-                        {
-                            var song = songOrder[i];
-                            songDataInfo[song].weight *= PPUtils.FALLOFF_RATE;
-                        }
-                    }
-                    // Lowest value song
-                    else
-                    {
-                        Logger.log.Debug("Lowest value song");
-                        weight = songDataInfo[songOrder.Last()].weight * PPUtils.FALLOFF_RATE;
-                    }
-
-                    // Add/update this song
-                    songDataInfo[songID] = new SongData(acc, pp, weight);
-                    // recalculate and save data
-                    CalculateSums();
-                    SaveSongData();
+                    i++;
                 }
+
+                // found a song it's worth more than, decrease weight of songs below it that are above original
+                if (weight != Double.NegativeInfinity)
+                {
+                    for (; i < oldIndex; i++)
+                    {
+                        var song = songOrder[i];
+                        songDataInfo[song].weight *= PPUtils.FALLOFF_RATE;
+                    }
+                }
+                // Lowest value song
+                else
+                {
+                    Logger.log.Debug("Lowest value song");
+                    weight = songDataInfo[songOrder.Last()].weight * PPUtils.FALLOFF_RATE;
+                }
+
+                // Add/update this song
+                songDataInfo[songID] = new SongData(acc, pp, weight);
+                // recalculate and save data
+                CalculateSums();
+                SaveSongData();
             }
         }
 
