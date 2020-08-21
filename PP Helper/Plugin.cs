@@ -107,6 +107,8 @@ namespace PP_Helper
             PPUtils.Initialize();
             ProfileDataLoader.instance.Initialize();
             AccLoader.instance.Initialize();
+            if (Config.playHistory)
+                PlayHistoryTracker.Initialize();
         }
 
         public void OnLevelSelected(LevelCollectionViewController levelCollectionViewController, IPreviewBeatmapLevel previewBeatmapLevel)

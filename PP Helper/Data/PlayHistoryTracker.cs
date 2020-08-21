@@ -34,6 +34,7 @@ namespace PP_Helper.Data
             catch (FileNotFoundException)
             {
                 Logger.log.Debug("No previous play history");
+                playHistory = new Dictionary<SongID, double>();
             }
             catch (Exception e)
             {
