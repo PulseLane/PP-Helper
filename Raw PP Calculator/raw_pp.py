@@ -38,8 +38,8 @@ pp_curve = [
 ]
 
 song_override = {
-    "2FDDB136BDA7F9E29B4CB6621D6D8E0F8A43B126": {"_ExpertPlus_SoloStandard": 288.89},
-    "27FCBAB3FB731B16EABA14A5D039EEFFD7BD44C9": {"_ExpertPlus_SoloStandard": 243.48}
+    "2FDDB136BDA7F9E29B4CB6621D6D8E0F8A43B126": {"_ExpertPlus_SoloStandard": 308.10},
+    "27FCBAB3FB731B16EABA14A5D039EEFFD7BD44C9": {"_ExpertPlus_SoloStandard": 249.54}
 }
 
 def open_url(url):
@@ -145,17 +145,18 @@ def get_data(response):
         # skipped unranked songs
         if song["ranked"] != 1:
             continue
-        if song["id"] in raw_pp_data and song["diff"] in raw_pp_data[song["id"]]:
+        songID = song["id"].upper()
+        if songID in raw_pp_data and song["diff"] in raw_pp_data[songID]:
             done = True
             break
         # add diff data to dict
-        if song["id"] in song_override:
-            data[song["id"]] = song_override[song["id"]]
+        if songID in song_override:
+            data[songID] = song_override[songID]
             continue
-        if song["id"] in data:
-            data[song["id"]].update(get_song_data(song))
+        if songID in data:
+            data[songID].update(get_song_data(song))
         else:
-            data[song["id"]] = get_song_data(song)
+            data[songID] = get_song_data(song)
         # back off for a bit
         sleep(WAIT_BETWEEN_LEADERBOARD_CALLS)
     if len(api_data["songs"]) == 0:
